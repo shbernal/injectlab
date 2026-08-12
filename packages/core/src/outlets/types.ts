@@ -28,7 +28,7 @@ import type { TypefaceId } from '../fonts/catalogue.js';
  * Resist adding one family per outlet. That is the failure mode that makes the tenth outlet
  * as expensive as the first, and it is easy to reach one small concession at a time.
  */
-export type LayoutFamily = 'uk-online-broadsheet' | 'fr-online-daily';
+export type LayoutFamily = 'uk-online-broadsheet' | 'fr-online-daily' | 'fr-online-freesheet';
 
 export type { TypefaceId };
 
@@ -54,6 +54,15 @@ export interface OutletTheme {
     text: string;
     muted: string;
     accent: string;
+    /**
+     * What text becomes when it sits on the accent rather than on the background: a
+     * subscriber marker, a masthead band, a pill.
+     *
+     * A separate field because the answer is the outlet's, not the layout's. White on a red
+     * or an ultramarine, near-black on a yellow, and a layout that guessed would be
+     * unreadable for whichever outlet it guessed wrong about.
+     */
+    onAccent: string;
     rule: string;
     background: string;
     sectionTag: string;
@@ -82,7 +91,7 @@ export interface OutletConventions {
   updatedLabel: string;
 }
 
-export type DateFormat = 'uk-long' | 'fr-long' | 'iso';
+export type DateFormat = 'uk-long' | 'fr-long' | 'fr-numeric' | 'iso';
 
 export interface Outlet {
   id: string;

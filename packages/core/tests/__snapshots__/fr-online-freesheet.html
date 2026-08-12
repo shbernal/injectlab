@@ -1,0 +1,252 @@
+<!doctype html>
+    <html lang="fr-FR">
+      <head>
+        <meta charset="utf-8" />
+        <title>Northwind Logistics hit by ransomware, deliveries halted across the UK</title>
+        <style>
+          @font-face {
+  font-family: 'Source Serif 4';
+  src: url(data:font/woff2;base64,REDACTED) format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: '20 Minutes Sans Stand-in';
+  src: url(data:font/woff2;base64,REDACTED) format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --il-font-headline: 'Source Serif 4', Georgia, "Times New Roman", serif;
+  --il-font-body: 'Source Serif 4', Georgia, "Times New Roman", serif;
+  --il-font-ui: '20 Minutes Sans Stand-in', Arial, Helvetica, sans-serif;
+  --il-text: #000000;
+  --il-muted: #6a6a6a;
+  --il-accent: #4742ff;
+  --il-on-accent: #ffffff;
+  --il-rule: #dddddd;
+  --il-bg: #fffffe;
+  --il-section: #6a6a6a;
+  --il-headline-size: 48px;
+  --il-headline-weight: 700;
+  --il-headline-leading: 1.2;
+  --il-measure: 592px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+img { max-width: 100%; display: block; }
+figure { margin: 0; }
+h1, h2, h3, p { margin: 0; }
+body {
+  background: var(--il-bg);
+  color: var(--il-text);
+  font-family: var(--il-font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.il-exercise {
+  background: #ffd400;
+  color: #000;
+  font-family: var(--il-font-ui);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 14px 8px;
+}
+.il-exercise--top { border-bottom: 3px solid #b80000; }
+.il-exercise--bottom { border-top: 3px solid #b80000; }
+
+.fs-band {
+  background: var(--il-accent);
+  color: var(--il-on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 26px 32px;
+}
+.fs-wordmark {
+  font-family: var(--il-font-ui);
+  font-weight: 700;
+  font-size: 34px;
+  letter-spacing: -0.02em;
+  color: var(--il-on-accent);
+}
+/* Sized to the wordmark it replaces, which on a band is the mark's whole job. */
+.fs-supplied { display: block; height: 44px; width: auto; }
+.fs-pill {
+  font-family: var(--il-font-ui);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--il-on-accent);
+  border: 1px solid var(--il-on-accent);
+  border-radius: 40px;
+  padding: 8px 18px;
+}
+.fs-nav {
+  font-family: var(--il-font-ui);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--il-text);
+  display: flex;
+  gap: 30px;
+  padding: 12px 32px;
+  border-bottom: 6px solid var(--il-accent);
+}
+.fs-nav span:first-child { color: var(--il-accent); }
+/* Centred, where the band and the section bar above it run the full width. That is measured
+   too: on a real page the band starts at the edge and the story starts 128px in. */
+.fs-shell {
+  max-width: 1048px;
+  margin: 0 auto;
+  padding: 28px 12px 56px;
+}
+.fs-crumbs { display: flex; gap: 10px; margin-bottom: 18px; }
+.fs-crumb {
+  font-family: var(--il-font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--il-on-accent);
+  background: var(--il-accent);
+  border-radius: 40px;
+  padding: 6px 12px;
+}
+.fs-headline {
+  font-family: var(--il-font-headline);
+  font-size: var(--il-headline-size);
+  font-weight: var(--il-headline-weight);
+  line-height: var(--il-headline-leading);
+  margin-bottom: 14px;
+}
+.fs-chapeau {
+  font-family: var(--il-font-headline);
+  font-size: 26px;
+  line-height: 1.2;
+  margin-bottom: 28px;
+}
+.fs-kicker {
+  font-family: var(--il-font-ui);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--il-section);
+}
+.fs-cols {
+  display: grid;
+  grid-template-columns: calc(var(--il-measure) + 80px) 1fr;
+  gap: 32px;
+}
+.fs-figure { margin-bottom: 22px; }
+.fs-caption {
+  font-family: var(--il-font-ui);
+  font-size: 14px;
+  color: var(--il-muted);
+  padding-top: 8px;
+  line-height: 1.4;
+}
+.fs-article { max-width: var(--il-measure); margin-left: auto; }
+.fs-byline {
+  font-family: var(--il-font-ui);
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+.fs-byline strong { font-weight: 700; }
+.fs-byline span { display: block; font-size: 12px; color: var(--il-muted); margin-top: 5px; }
+.fs-body { font-size: 20px; line-height: 1.6; margin-bottom: 22px; }
+.fs-aside-title {
+  font-family: var(--il-font-ui);
+  font-size: 18px;
+  font-weight: 700;
+  border-bottom: 4px solid var(--il-accent);
+  padding-bottom: 8px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.fs-aside-item {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--il-rule);
+}
+.fs-aside-rank {
+  font-family: var(--il-font-ui);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--il-accent);
+}
+.fs-aside-text {
+  font-family: var(--il-font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+        </style>
+      </head>
+      <body>
+        <div class="il-exercise il-exercise--top">[EXERCISE, EXERCISE, EXERCISE]</div> 
+    <header class="fs-band">
+      <span class="fs-pill">Menu</span>
+      <div class="fs-wordmark">20 Minutes</div>
+      <span class="fs-pill">Direct</span>
+    </header>
+    <nav class="fs-nav">
+      <span>Actualité</span><span>Société</span><span>Monde</span><span>Economie</span>
+      <span>High-Tech</span><span>Planète</span>
+    </nav>
+    <div class="fs-shell">
+      <div class="fs-crumbs">
+        <span class="fs-crumb">Accueil</span><span class="fs-crumb">Actualité</span>
+      </div>
+      <h1 class="fs-headline">Northwind Logistics hit by ransomware, deliveries halted across the UK</h1>
+      <p class="fs-chapeau">
+        <span class="fs-kicker">Technology</span>
+        &bull; The haulier says its depots are running on paper and that it has notified the regulator.
+      </p>
+      <div class="fs-cols">
+        <div>
+          
+          <article class="fs-article">
+            <div class="fs-byline">
+              <strong>Helen Morrow</strong>
+              <span>Publié le 12/08/2026 à 10h14</span>
+            </div>
+            <p class="fs-body">Northwind Logistics has taken its depot systems offline after a ransomware attack.</p><p class="fs-body">The company said it had engaged external incident responders.</p>
+          </article>
+        </div>
+        <aside class="fs-aside">
+          <div class="fs-aside-title">Les + lus</div>
+          
+              <div class="fs-aside-item">
+                <span class="fs-aside-rank">1</span>
+                <span class="fs-aside-text">Ce que l&#39;on sait de la panne qui a touché les guichets</span>
+              </div>
+            
+              <div class="fs-aside-item">
+                <span class="fs-aside-rank">2</span>
+                <span class="fs-aside-text">Trois questions sur la facture des réseaux vieillissants</span>
+              </div>
+            
+              <div class="fs-aside-item">
+                <span class="fs-aside-rank">3</span>
+                <span class="fs-aside-text">Le calendrier des travaux prévus à la rentrée</span>
+              </div>
+            
+              <div class="fs-aside-item">
+                <span class="fs-aside-rank">4</span>
+                <span class="fs-aside-text">Témoignages : une journée sans système informatique</span>
+              </div>
+            
+        </aside>
+      </div>
+    </div>
+   <div class="il-exercise il-exercise--bottom">[EXERCISE, EXERCISE, EXERCISE]</div>
+      </body>
+    </html> 

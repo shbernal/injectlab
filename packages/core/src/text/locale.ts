@@ -19,7 +19,7 @@ function formatter(locale: string, timeZone: string, options: Intl.DateTimeForma
   return found;
 }
 
-/** '12 August 2026', '12 aout 2026'. */
+/** '12 August 2026', '12 aout 2026', '12/08/2026'. */
 export function formatDate(instant: string, outlet: Outlet): string {
   const date = new Date(instant);
   const { locale, timeZone } = outlet;
@@ -27,6 +27,14 @@ export function formatDate(instant: string, outlet: Outlet): string {
   switch (outlet.conventions.dateFormat) {
     case 'iso':
       return formatter('en-CA', timeZone, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(date);
+    // Written in the outlet's own locale rather than as a fixed pattern, so the separator and
+    // the field order are the locale's: 12/08/2026 in France, and correct elsewhere for free.
+    case 'fr-numeric':
+      return formatter(locale, timeZone, {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
@@ -61,7 +69,8 @@ export function formatTime(instant: string, where: Outlet | TimeContext): string
  *
  * 'Published 12 August 2026, 09:14' against 'Publié le 12 août 2026 à 09h14'. The joining
  * words are part of the convention, which is why this is not one `Intl` call with a format
- * option.
+ * option. The two French conventions differ only in the date, never in the joining: an outlet
+ * that writes 12/08/2026 still writes à 09h14 after it.
  */
 export function formatTimestamp(instant: string, outlet: Outlet): string {
   const date = formatDate(instant, outlet);
@@ -74,6 +83,7 @@ export function formatTimestamp(instant: string, outlet: Outlet): string {
 function joinTimestamp(format: DateFormat, label: string, date: string, time: string): string {
   switch (format) {
     case 'fr-long':
+    case 'fr-numeric':
       return `${label} ${date} à ${time.replace(':', 'h')}`;
     case 'uk-long':
     case 'iso':

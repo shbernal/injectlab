@@ -40,6 +40,7 @@ export function themeVariables(theme: OutletTheme): string {
     '--il-text': theme.colors.text,
     '--il-muted': theme.colors.muted,
     '--il-accent': theme.colors.accent,
+    '--il-on-accent': theme.colors.onAccent,
     '--il-rule': theme.colors.rule,
     '--il-bg': theme.colors.background,
     '--il-section': theme.colors.sectionTag,

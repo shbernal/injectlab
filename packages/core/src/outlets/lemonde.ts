@@ -71,6 +71,9 @@ export const lemonde: Outlet = {
       muted: '#717b8e',
       // The signature yellow. It fills the subscriber marker rather than colouring text.
       accent: '#ffd644',
+      // The marker's own text. The yellow is far too light to carry white, so it carries the
+      // headline colour, which is what Le Monde does.
+      onAccent: '#2a303b',
       // The article's dominant 1px border, on ten separate elements.
       rule: '#d5d8dc',
       // The article sits on white, inside a page whose surround is `#f5f6f8`.

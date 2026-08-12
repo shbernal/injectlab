@@ -44,6 +44,26 @@ const DEMOS: Record<OutletId, NewsInject> = {
       "L'Agence nationale de la sécurité des systèmes d'information a confirmé avoir été saisie. Plusieurs syndicats ont demandé la tenue d'un comité social et économique extraordinaire.",
     ],
   },
+  /**
+   * The same French incident as the daily above, an hour later and in the other register.
+   * Rendered side by side that is the useful demonstration: one event, two publications, and
+   * the difference between them is the outlet record rather than the copy.
+   */
+  '20minutes': {
+    kind: 'news',
+    outlet: '20minutes',
+    section: 'Économie',
+    headline: "Cyberattaque chez Aurélia Énergie : ce que l'on sait de la panne",
+    standfirst:
+      "La production est à l'arrêt sur trois sites, le groupe dit avoir isolé ses réseaux industriels et l'ANSSI a été saisie.",
+    byline: '20 Minutes avec agence',
+    publishedAt: '2026-08-12T11:25:00+02:00',
+    body: [
+      "La production d'Aurélia Énergie est suspendue depuis mardi matin sur trois sites français, après une cyberattaque détectée dans la nuit. Le groupe n'a pas précisé combien de salariés sont concernés.",
+      "Selon le communiqué publié en fin de matinée, les réseaux industriels ont été coupés des réseaux bureautiques dès les premières heures. Aucune donnée client n'aurait été volée à ce stade, une formulation qui laisse la question ouverte.",
+      "L'Agence nationale de la sécurité des systèmes d'information a été saisie et accompagne l'entreprise. Aucune date de reprise n'a été annoncée.",
+    ],
+  },
 };
 
 /**

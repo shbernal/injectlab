@@ -4,7 +4,7 @@ import { getOutlet, isOutletId, listOutletIds, listOutlets } from '../src/outlet
 import type { Outlet } from '../src/outlets/types.js';
 
 const HEX = /^#[0-9a-f]{6}$/u;
-const LAYOUT_FAMILIES = new Set(['uk-online-broadsheet', 'fr-online-daily']);
+const LAYOUT_FAMILIES = new Set(['uk-online-broadsheet', 'fr-online-daily', 'fr-online-freesheet']);
 
 describe('the outlet registry', () => {
   it('is not empty, since an empty registry makes OutletId unusable', () => {

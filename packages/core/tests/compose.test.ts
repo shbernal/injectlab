@@ -18,7 +18,7 @@ function redactBlobs(document: string): string {
   );
 }
 
-/** Le Monde is authored later. The French conventions are exercisable now without it. */
+/** Written before Le Monde existed, and kept: the daily's snapshot answers for the layout. */
 function frenchFixture(): Outlet {
   const bbc = getOutlet('bbc');
   return {
@@ -86,6 +86,20 @@ describe('buildDocument', () => {
     const view = await buildView(FIXED, frenchFixture());
     await expect(toHtmlString(frOnlineDaily(view))).toMatchFileSnapshot(
       './__snapshots__/fr-online-daily.html',
+    );
+  });
+
+  /**
+   * The freesheet family goes through the whole composer rather than the layout function
+   * alone, because the outlet that uses it is authored and there is no reason to fake it. The
+   * story is the UK one on purpose: what the snapshot is for is the arrangement and the
+   * theme, and holding the copy fixed across the three families is what makes them
+   * comparable.
+   */
+  it('matches the golden snapshot for the French freesheet layout', async () => {
+    const document = await buildDocument({ ...FIXED, outlet: '20minutes' });
+    await expect(redactBlobs(document)).toMatchFileSnapshot(
+      './__snapshots__/fr-online-freesheet.html',
     );
   });
 

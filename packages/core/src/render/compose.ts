@@ -9,6 +9,7 @@ import { fontFaceCss, typefaceDataUri } from './fonts.js';
 import { html, raw, toHtmlString } from './html.js';
 import type { Html } from './html.js';
 import { FR_ONLINE_DAILY_CSS, frOnlineDaily } from './layouts/fr-online-daily.js';
+import { FR_ONLINE_FREESHEET_CSS, frOnlineFreesheet } from './layouts/fr-online-freesheet.js';
 import { UK_ONLINE_BROADSHEET_CSS, ukOnlineBroadsheet } from './layouts/uk-online-broadsheet.js';
 import { X_POST_CSS, xPost } from './layouts/x-post.js';
 import { xTheme } from './platforms/x.js';
@@ -31,6 +32,7 @@ import type { ArticleView, ViewContext } from './view.js';
 const LAYOUTS: Record<LayoutFamily, { css: string; render: (view: ArticleView) => Html }> = {
   'uk-online-broadsheet': { css: UK_ONLINE_BROADSHEET_CSS, render: ukOnlineBroadsheet },
   'fr-online-daily': { css: FR_ONLINE_DAILY_CSS, render: frOnlineDaily },
+  'fr-online-freesheet': { css: FR_ONLINE_FREESHEET_CSS, render: frOnlineFreesheet },
 };
 
 export interface ComposeOptions extends ViewContext {

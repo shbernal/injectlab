@@ -14,7 +14,7 @@ actually write stimuli.
 - **Per-post times in a thread.** `thread` is a list of strings, so every post in one shares
   the inject's timestamp. This is the same underlying gap as `updatedAt`: one time per inject,
   where both cases want one per unit of content. Worth fixing together.
-- **A subscriber flag.** The French layout shows its subscriber marker on every article,
+- **A subscriber flag.** The French daily layout shows its subscriber marker on every article,
   because it is layout furniture rather than a spec field. It should be neither always on nor
   always off.
 - **`readTime`.** "5 min read". Cheap furniture whose absence is noticeable.
@@ -33,8 +33,13 @@ covers publications only, and X has one worth reading.
 - **Sector and trade press**, which is often what actually breaks a cyber story first.
 - Per-outlet mobile variants, once the desktop set is broad.
 
-Note that the two existing outlets share no layout family, so the third outlet is the one that
-will show whether `uk-online-broadsheet` really is reusable or merely happens to fit the BBC.
+The third outlet was meant to settle whether a layout family is reusable or merely fits the
+outlet it was written for. It did not: 20 Minutes brought a third family, `fr-online-freesheet`,
+because a freesheet leads with a band of brand colour where a daily centres a wordmark over a
+rule, and no amount of theme data turns one into the other. What it did settle is smaller and
+still useful. The theme model absorbed the difference in everything below the arrangement,
+gaining one field (`colors.onAccent`) and one date convention, and neither existing layout was
+touched. The question moves to the fourth outlet, which should be a second daily.
 
 ## More channels
 

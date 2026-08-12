@@ -31,6 +31,12 @@ const frenchDaily: Outlet = {
   },
 };
 
+/** The other French convention: the same locale, writing the date in figures. */
+const frenchFreesheet: Outlet = {
+  ...frenchDaily,
+  conventions: { ...frenchDaily.conventions, dateFormat: 'fr-numeric', bylinePrefix: '' },
+};
+
 describe('formatDate', () => {
   it('writes a UK long date in the outlet time zone', () => {
     expect(formatDate(INSTANT, bbc)).toBe('12 August 2026');
@@ -38,6 +44,10 @@ describe('formatDate', () => {
 
   it('writes a French long date in the outlet time zone', () => {
     expect(formatDate(INSTANT, frenchDaily)).toMatch(/^12 ao.t 2026$/u);
+  });
+
+  it('writes a French numeric date in the outlet order, day first', () => {
+    expect(formatDate(INSTANT, frenchFreesheet)).toBe('12/08/2026');
   });
 
   it('writes an ISO date when the convention asks for one', () => {
@@ -68,12 +78,20 @@ describe('formatTimestamp', () => {
   it('joins the French convention with the hour marker', () => {
     expect(formatTimestamp(INSTANT, frenchDaily)).toMatch(/^Publié le 12 ao.t 2026 à 10h14$/u);
   });
+
+  it('keeps the hour marker when the date is numeric, since only the date changes', () => {
+    expect(formatTimestamp(INSTANT, frenchFreesheet)).toBe('Publié le 12/08/2026 à 10h14');
+  });
 });
 
 describe('formatByline', () => {
   it('applies the outlet prefix', () => {
     expect(formatByline('Helen Morrow', bbc)).toBe('By Helen Morrow');
     expect(formatByline('Jean Dupont', frenchDaily)).toBe('Par Jean Dupont');
+  });
+
+  it('prints the name alone for an outlet whose prefix is empty', () => {
+    expect(formatByline('Jean Dupont', frenchFreesheet)).toBe('Jean Dupont');
   });
 
   it('returns nothing for an absent or blank byline, rather than a bare prefix', () => {

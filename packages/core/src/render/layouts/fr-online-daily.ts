@@ -84,7 +84,7 @@ export const FR_ONLINE_DAILY_CSS = `
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--il-text);
+  color: var(--il-on-accent);
   background: var(--il-accent);
   padding: 3px 7px;
   align-self: flex-start;

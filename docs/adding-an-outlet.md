@@ -5,8 +5,8 @@ wrong: either the theme is missing a field, or the outlet genuinely belongs to a
 family. Both are worth stopping to think about, and neither is fixed by special-casing one
 outlet inside a layout.
 
-This is a draft. It will be tightened once two outlets have actually been authored through
-it.
+Three outlets have been authored through this, and it has held. What it did not predict is
+that the third would need a new layout family; see step 2.
 
 ## Before you start: what may not go in the repository
 
@@ -96,6 +96,19 @@ expensive as the first, and it is reached one small concession at a time. A diff
 headline size, a different rule colour and a different masthead are all theme data. A
 fundamentally different furniture arrangement is a family.
 
+20 Minutes is the worked example of the second case, and of the test that separates them. Ask
+what a reader recognises the publication by before it is read. For a French daily it is a
+centred wordmark over a rule and one column running down the page, and Le Monde in another
+palette is still that page. For 20 Minutes it is a saturated band of brand colour with the
+masthead in it, pill breadcrumbs, and a headline set far wider than the body column beneath
+it. None of those are values a theme could have supplied, so it became `fr-online-freesheet`.
+
+Note what did **not** justify a family, because that is the harder half. A serif headline
+where the other French outlet has a serif headline at a different size and weight, a numeric
+date instead of a written month, a byline with no prefix, white text on the accent instead of
+near black: all theme or convention data, and two of them were fields the model was missing
+rather than reasons to write another layout.
+
 ## 3. Fill in the record
 
 Write `packages/core/src/outlets/<id>.ts` from `notes.json`. Everything in `OutletTheme` maps
@@ -105,6 +118,7 @@ to something the capture measured:
 | ------------------------ | ------------------------------------------------------------------------ |
 | `fonts.*.face`           | the nearest bundled face to the captured `fontFamily`                    |
 | `colors.text`            | the headline or body `color`                                             |
+| `colors.onAccent`        | the text colour of whatever the accent fills: a tag, a pill, a band      |
 | `colors.rule`            | the divider's `borderTopColor`                                           |
 | `scale.headlineSize`     | the headline's `fontSize`                                                |
 | `scale.headlineLeading`  | its `lineHeight` divided by its `fontSize`                               |

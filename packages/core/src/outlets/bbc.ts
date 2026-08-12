@@ -44,6 +44,8 @@ export const bbc: Outlet = {
       text: '#202224',
       muted: '#545658',
       accent: '#bb1919',
+      // The red is dark enough to carry white, which is how the BBC uses it.
+      onAccent: '#ffffff',
       rule: '#e6e8ea',
       background: '#ffffff',
       sectionTag: '#bb1919',
