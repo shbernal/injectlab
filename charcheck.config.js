@@ -50,10 +50,14 @@ export default {
       message: REWORD,
       include: ['packages/*/src/**/*.ts'],
     },
-    // A `no-em-dash-in-demos` rule over `demos/**/*.{yaml,yml,json}` belongs here as soon as
-    // there are demo specs. It is left out while the directory is empty, because charcheck
-    // reports a rule that matches nothing, and a standing warning trains you to ignore
-    // warnings.
+    {
+      // Demo specs are copy-and-paste templates, so a bad character in one propagates into
+      // real exercises.
+      id: 'no-em-dash-in-demos',
+      chars: DASHES,
+      message: REWORD,
+      include: ['demos/**/*.{yaml,yml,json}'],
+    },
     {
       id: 'no-invisibles',
       chars: INVISIBLES,
