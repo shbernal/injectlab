@@ -60,7 +60,7 @@ export default {
       message: 'Invisible character. Delete it.',
       // The second pattern is not redundant: dotted directories are only scanned when a
       // pattern names them, so the workflows would otherwise go unchecked.
-      include: ['**/*.{ts,js,md,json,yaml,yml}', '.github/**/*.yml'],
+      include: ['**/*.{ts,js,mjs,md,json,yaml,yml}', '.github/**/*.yml'],
       exclude: [...GENERATED, ...REFERENCES],
     },
     {

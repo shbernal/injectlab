@@ -30,8 +30,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       # typecheck, lint, format, test, build, then charcheck over this repo.
-      # Render tests are skipped here: they need a Chromium download, and whether CI pays
-      # that cost is a decision for the renderer, not for the scaffold.
+      # End-to-end render tests are opt-in through INJECTLAB_E2E and stay off here: they
+      # need a Chromium download, and whether CI pays that cost is a decision for the
+      # renderer, not for the scaffold.
       - run: pnpm run check
-        env:
-          INJECTLAB_SKIP_RENDER_TESTS: '1'
