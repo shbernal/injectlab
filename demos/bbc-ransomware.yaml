@@ -1,0 +1,20 @@
+# A UK broadsheet article, cyberattack framed.
+#
+# Northwind Logistics is fictional, as is every company in every demo here. Render it with:
+#   inject render demos/bbc-ransomware.yaml
+
+kind: news
+outlet: bbc
+section: Technology
+
+headline: Northwind Logistics hit by ransomware, deliveries halted across the UK
+standfirst: The company said it had taken systems offline as a precaution and was working with the National Cyber Security Centre.
+byline: Technology reporter
+
+publishedAt: 2026-08-12T09:14:00+01:00
+url: https://www.bbc.co.uk/news/technology-00000000
+
+body:
+  - Northwind Logistics has taken its depot systems offline after what it described as a significant ransomware attack, leaving several hundred delivery routes running on paper.
+  - In a short statement the company said it had isolated the affected systems as a precaution and had engaged external incident responders. It would not say whether customer data had been accessed.
+  - The regulator confirmed it had been notified and said it was in contact with the company. Industry figures said the timing, days before a bank holiday weekend, was likely to compound the disruption.

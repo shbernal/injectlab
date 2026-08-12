@@ -29,6 +29,21 @@ const DEMOS: Record<OutletId, NewsInject> = {
       'The regulator confirmed it had been notified and said it was in contact with the company. Industry figures said the timing, days before a bank holiday weekend, was likely to compound the disruption.',
     ],
   },
+  lemonde: {
+    kind: 'news',
+    outlet: 'lemonde',
+    section: 'Économie',
+    headline: "Cyberattaque chez Aurélia Énergie : la production à l'arrêt sur trois sites",
+    standfirst:
+      "Le groupe affirme avoir isolé ses réseaux industriels et avoir saisi l'Agence nationale de la sécurité des systèmes d'information.",
+    byline: 'Camille Faure',
+    publishedAt: '2026-08-12T10:40:00+02:00',
+    body: [
+      "Aurélia Énergie a suspendu la production sur trois de ses sites français à la suite d'une cyberattaque détectée dans la nuit de lundi à mardi, a indiqué le groupe dans un communiqué.",
+      "La direction assure que les réseaux industriels ont été isolés des réseaux bureautiques dès les premières heures, et qu'aucune donnée client n'a, à ce stade, été exfiltrée.",
+      "L'Agence nationale de la sécurité des systèmes d'information a confirmé avoir été saisie. Plusieurs syndicats ont demandé la tenue d'un comité social et économique extraordinaire.",
+    ],
+  },
 };
 
 export function demoSpecs(): NewsInject[] {

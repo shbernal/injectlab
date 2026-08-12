@@ -3,6 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { chars } from 'charcheck';
+import { listOutletIds } from '@injectlab/core';
 import type { Renderer, RenderTarget } from '@injectlab/core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
@@ -316,7 +317,23 @@ describe('demo', () => {
   it('renders one asset per outlet with no arguments beyond the destination', async () => {
     const h = harness();
     expect(await run(['demo', '--out', h.dir], h.context)).toBe(EXIT_OK);
-    expect((await readdir(h.dir)).filter((f) => f.endsWith('.png'))).toHaveLength(1);
+
+    // Derived from the registry, so adding an outlet does not make this test wrong.
+    const expected = listOutletIds().length;
+    expect((await readdir(h.dir)).filter((file) => file.endsWith('.png'))).toHaveLength(expected);
+  });
+
+  it('names every asset after the outlet that produced it', async () => {
+    const h = harness();
+    await run(['demo', '--out', h.dir], h.context);
+    const files = await readdir(h.dir);
+
+    for (const id of listOutletIds()) {
+      expect(
+        files.some((file) => file.includes(`-${id}-`)),
+        id,
+      ).toBe(true);
+    }
   });
 });
 

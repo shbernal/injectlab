@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { PlaywrightRenderer } from '../src/render/playwright.js';
 import { pngSize, readProvenance } from '../src/render/provenance.js';
-import { renderInject, targetFor } from '../src/render/render.js';
+import { renderAll, renderInject, targetFor } from '../src/render/render.js';
 import type { NewsInject } from '../src/spec/types.js';
 
 /**
@@ -64,6 +64,27 @@ describe.runIf(enabled)('end to end, through headless Chromium', () => {
     } finally {
       await renderer.close();
     }
+  }, 120_000);
+
+  /**
+   * Regression. Concurrent renders each used to launch their own browser, because the lazy
+   * getter memoised the resolved browser rather than the launch promise. Only the last was
+   * ever stored, so `close` could not reach the others, and the command hung after writing
+   * every file it was asked for. The visible symptom was a CLI that never returned.
+   */
+  it('leaves no orphaned browser process after a concurrent batch', async () => {
+    const renderer = new PlaywrightRenderer();
+
+    try {
+      await renderAll(
+        Array.from({ length: 4 }, (_, index) => ({ ...INJECT, headline: `Story ${index}` })),
+        { renderer, target: targetFor('card') },
+      );
+    } finally {
+      await renderer.close();
+    }
+
+    expect(process.getActiveResourcesInfo()).not.toContain('ProcessWrap');
   }, 120_000);
 });
 

@@ -1,4 +1,5 @@
 import { bbc } from './bbc.js';
+import { lemonde } from './lemonde.js';
 import type { Outlet } from './types.js';
 
 /**
@@ -10,6 +11,7 @@ import type { Outlet } from './types.js';
  */
 const OUTLETS = {
   bbc,
+  lemonde,
 } as const satisfies Record<string, Outlet>;
 
 export type OutletId = keyof typeof OUTLETS;

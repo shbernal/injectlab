@@ -82,9 +82,9 @@ export const FR_ONLINE_DAILY_CSS = `
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--il-accent);
-  border: 1px solid var(--il-accent);
-  padding: 2px 6px;
+  color: var(--il-text);
+  background: var(--il-accent);
+  padding: 3px 7px;
   align-self: flex-start;
 }
 .fr-figure { margin-bottom: 26px; }
@@ -133,7 +133,7 @@ export function frOnlineDaily(view: ArticleView): Html {
             ${view.byline !== '' && html`<strong>${view.byline}</strong>`}
             ${view.byline !== '' && raw(' ')}${view.timestamp}
           </div>
-          <div class="fr-tag">Article reserve aux abonnes</div>
+          <div class="fr-tag">Article réservé aux abonnés</div>
         </div>
         ${view.body.map((paragraph) => html`<p class="fr-body">${paragraph}</p>`)}
       </article>

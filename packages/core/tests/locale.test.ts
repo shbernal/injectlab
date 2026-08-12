@@ -27,7 +27,7 @@ const frenchDaily: Outlet = {
     bylinePrefix: 'Par ',
     sectionDefault: 'Economie',
     headlineCase: 'sentence',
-    updatedLabel: 'Publie le',
+    updatedLabel: 'Publié le',
   },
 };
 
@@ -66,7 +66,7 @@ describe('formatTimestamp', () => {
   });
 
   it('joins the French convention with the hour marker', () => {
-    expect(formatTimestamp(INSTANT, frenchDaily)).toMatch(/^Publie le 12 ao.t 2026 a 10h14$/u);
+    expect(formatTimestamp(INSTANT, frenchDaily)).toMatch(/^Publié le 12 ao.t 2026 à 10h14$/u);
   });
 });
 

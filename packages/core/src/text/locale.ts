@@ -52,7 +52,7 @@ export function formatTime(instant: string, outlet: Outlet): string {
 /**
  * The full timestamp line as the outlet prints it, label included.
  *
- * 'Published 12 August 2026, 09:14' against 'Publie le 12 aout 2026 a 09h14'. The joining
+ * 'Published 12 August 2026, 09:14' against 'Publié le 12 août 2026 à 09h14'. The joining
  * words are part of the convention, which is why this is not one `Intl` call with a format
  * option.
  */
@@ -67,7 +67,7 @@ export function formatTimestamp(instant: string, outlet: Outlet): string {
 function joinTimestamp(format: DateFormat, label: string, date: string, time: string): string {
   switch (format) {
     case 'fr-long':
-      return `${label} ${date} a ${time.replace(':', 'h')}`;
+      return `${label} ${date} à ${time.replace(':', 'h')}`;
     case 'uk-long':
     case 'iso':
       return `${label} ${date}, ${time}`;

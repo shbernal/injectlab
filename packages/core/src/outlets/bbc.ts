@@ -3,11 +3,13 @@ import type { Outlet } from './types.js';
 /**
  * BBC News.
  *
- * Provisional. The values here were read off the render spike rather than off a captured
- * article, so they are a plausible UK online broadsheet rather than a studied match. They
- * exist now because the registry has to hold at least one outlet for `OutletId` to be a
- * usable type, and because a theme is much easier to refine than to invent. The capture and
- * authoring pass replaces these numbers with measured ones.
+ * Measured, not guessed. The typography and colours come from `getComputedStyle` on a real
+ * article at a 1280 viewport: headline 38px at weight 500 with a 44px line, body column
+ * 721px inside a 1248px container, text `#202224`, timestamps `#545658`.
+ *
+ * Weight 500 matters and is not a rounding of 400. Every bundled face is variable across
+ * 400 to 700 in one file, so 500 is a real interpolated weight rather than a synthesised
+ * approximation, and a headline set at 700 reads noticeably heavier than the real thing.
  */
 export const bbc: Outlet = {
   id: 'bbc',
@@ -20,37 +22,38 @@ export const bbc: Outlet = {
   theme: {
     fonts: {
       headline: {
-        family: 'IL Serif',
+        family: 'BBC Reith Serif Stand-in',
         face: 'lora',
         fallback: 'Georgia, "Times New Roman", serif',
-        weights: [400, 700],
+        weights: [400, 500, 700],
       },
       body: {
-        family: 'IL Serif',
+        family: 'BBC Reith Serif Stand-in',
         face: 'lora',
         fallback: 'Georgia, "Times New Roman", serif',
-        weights: [400, 700],
+        weights: [400, 500, 700],
       },
       ui: {
-        family: 'IL Sans',
+        family: 'BBC Reith Sans Stand-in',
         face: 'libre-franklin',
         fallback: 'Arial, Helvetica, sans-serif',
-        weights: [400, 700],
+        weights: [400, 500, 700],
       },
     },
     colors: {
-      text: '#141414',
-      muted: '#6e6e6e',
+      text: '#202224',
+      muted: '#545658',
       accent: '#bb1919',
-      rule: '#ebebeb',
+      rule: '#e6e8ea',
       background: '#ffffff',
       sectionTag: '#bb1919',
     },
     scale: {
-      headlineSize: 46,
-      headlineWeight: 700,
-      headlineLeading: 1.1,
-      measure: 780,
+      headlineSize: 38,
+      headlineWeight: 500,
+      // 44px over 38px, as measured.
+      headlineLeading: 1.16,
+      measure: 721,
     },
     masthead: { kind: 'wordmark', source: 'BBC NEWS' },
   },
@@ -62,8 +65,10 @@ export const bbc: Outlet = {
     updatedLabel: 'Published',
   },
   fidelity:
-    'Typography is approximated: Lora stands in for Reith Serif and Libre Franklin for Reith Sans, ' +
-    'both open-licensed and chosen for proximity rather than identity. The masthead is set as a ' +
-    'plain wordmark, not the BBC blocks logo. No BBC font or logo file is used. Colours and metrics ' +
-    'are provisional and have not yet been measured against a captured article.',
+    'Typography is approximated: Lora stands in for BBC Reith Serif and Libre Franklin for BBC ' +
+    'Reith Sans, both open-licensed and chosen for visual proximity rather than identity. No BBC ' +
+    'font file is used. The masthead is a plain wordmark set in the stand-in sans, not the BBC ' +
+    'blocks logo, which is a trademark and is not reproduced. Colours, sizes and column widths ' +
+    'were measured from a real article and are close; the letterforms are not the same ' +
+    'letterforms and will not survive a careful look.',
 };

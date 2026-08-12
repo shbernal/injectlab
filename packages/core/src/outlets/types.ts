@@ -78,7 +78,7 @@ export interface OutletConventions {
   bylinePrefix: string;
   sectionDefault: string;
   headlineCase: 'sentence' | 'title';
-  /** 'Published', 'Publie le'. */
+  /** 'Published', 'Publié le'. */
   updatedLabel: string;
 }
 

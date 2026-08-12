@@ -36,7 +36,7 @@ function frenchFixture(): Outlet {
       bylinePrefix: 'Par ',
       sectionDefault: 'Economie',
       headlineCase: 'sentence',
-      updatedLabel: 'Publie le',
+      updatedLabel: 'Publié le',
     },
   };
 }
