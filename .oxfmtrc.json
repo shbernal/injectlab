@@ -11,6 +11,7 @@
     "coverage/",
     "out/",
     ".references/",
-    "pnpm-lock.yaml"
+    "pnpm-lock.yaml",
+    "**/__snapshots__/"
   ]
 }

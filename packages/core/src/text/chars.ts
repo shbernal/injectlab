@@ -1,7 +1,7 @@
 import { chars, clauseSeparator, scanText } from 'charcheck';
 import type { Rule } from 'charcheck';
 
-import type { CharPolicy, InjectSpec, RenderOptions } from '../spec/types.js';
+import type { CharPolicy, InjectSpec } from '../spec/types.js';
 
 /**
  * The character gate.
@@ -58,6 +58,11 @@ const RULES: readonly Rule[] = [
   },
 ];
 
+/** The disclaimer is user text that reaches the page, so it is scanned with the rest. */
+export interface DisclaimerContext {
+  disclaimer?: string;
+}
+
 export interface CharFinding {
   /** Dotted path to the offending field, for example `body.1` or `image.caption`. */
   field: string;
@@ -72,10 +77,7 @@ export interface CharFinding {
 }
 
 /** Every user-authored string in a spec, with the path a person would use to find it. */
-export function userText(
-  inject: InjectSpec,
-  options?: Pick<RenderOptions, 'disclaimer'>,
-): Map<string, string> {
+export function userText(inject: InjectSpec, options?: DisclaimerContext): Map<string, string> {
   const fields = new Map<string, string>();
   const put = (field: string, value: string | undefined) => {
     if (value !== undefined && value !== '') fields.set(field, value);
@@ -95,7 +97,7 @@ export function userText(
 
 export async function scanInject(
   inject: InjectSpec,
-  options?: Pick<RenderOptions, 'disclaimer'>,
+  options?: DisclaimerContext,
 ): Promise<CharFinding[]> {
   const findings: CharFinding[] = [];
 
@@ -147,7 +149,7 @@ export interface GateResult {
 export async function gate(
   inject: InjectSpec,
   policy: CharPolicy,
-  options?: Pick<RenderOptions, 'disclaimer'>,
+  options?: DisclaimerContext,
 ): Promise<GateResult> {
   if (policy === 'off') return { findings: [] };
 

@@ -50,6 +50,10 @@ importers:
       yaml:
         specifier: ^2.9.0
         version: 2.9.0
+    devDependencies:
+      playwright:
+        specifier: ^1.62.1
+        version: 1.62.1
 
 packages:
 

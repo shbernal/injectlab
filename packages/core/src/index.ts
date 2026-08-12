@@ -8,8 +8,6 @@
  * usable in a plain test run with no browser installed.
  */
 
-export { DEFAULT_DISCLAIMER } from './disclaimer.js';
-
 export type {
   CharPolicy,
   InjectImage,
@@ -18,7 +16,6 @@ export type {
   NewsInject,
   RenderOptions,
 } from './spec/types.js';
-export { NO_DISCLAIMER } from './spec/types.js';
 
 export { formatForPath, formatSpecErrors, parseSpec } from './spec/parse.js';
 export type { ParseResult, SpecError, SpecFormat } from './spec/parse.js';
@@ -47,6 +44,37 @@ export {
 export type { Typeface, TypefaceId } from './fonts/catalogue.js';
 
 export { CharPolicyError, formatCharFindings, gate, scanInject, userText } from './text/chars.js';
-export type { CharFinding, GateResult } from './text/chars.js';
+export type { CharFinding, DisclaimerContext, GateResult } from './text/chars.js';
 
 export { formatByline, formatDate, formatTime, formatTimestamp } from './text/locale.js';
+
+export { buildDocument } from './render/compose.js';
+export type { ComposeOptions } from './render/compose.js';
+export {
+  DEFAULT_DISCLAIMER,
+  DISCLAIMER_CSS,
+  NO_DISCLAIMER,
+  disclaimerBand,
+} from './render/disclaimer.js';
+export { escapeHtml, html, raw, toHtmlString } from './render/html.js';
+export type { Html } from './render/html.js';
+export { DEFAULT_TARGET } from './render/renderer.js';
+export type { Renderer, RenderTarget } from './render/renderer.js';
+export {
+  NotAPngError,
+  PROVENANCE_COMMENT,
+  addProvenance,
+  pngSize,
+  readProvenance,
+} from './render/provenance.js';
+export type { Provenance } from './render/provenance.js';
+export { renderAll, renderInject, targetFor } from './render/render.js';
+export type { BatchResult, RenderInjectOptions, RenderResult } from './render/render.js';
+export { ImageError, buildView } from './render/view.js';
+export type { ArticleView, ViewContext } from './render/view.js';
+
+/**
+ * `PlaywrightRenderer` is deliberately not re-exported here. Importing it pulls in
+ * Playwright, and `@injectlab/core` has to stay importable in a test run with no browser
+ * installed. Consumers reach it at `@injectlab/core/playwright`.
+ */

@@ -62,6 +62,3 @@ export interface RenderOptions {
 }
 
 export type CharPolicy = 'error' | 'warn' | 'off';
-
-/** Sentinel for `disclaimer`, so 'none' is not mistaken for a caller wanting that word. */
-export const NO_DISCLAIMER = 'none';

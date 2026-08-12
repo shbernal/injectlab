@@ -38,6 +38,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./playwright": {
+      "types": "./dist/render/playwright.d.ts",
+      "import": "./dist/render/playwright.js"
     }
   },
   "scripts": {
@@ -47,5 +51,16 @@
     "charcheck": "^0.2.3",
     "valibot": "^1.4.2",
     "yaml": "^2.9.0"
+  },
+  "peerDependencies": {
+    "playwright": "^1.62.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
   }
 }
