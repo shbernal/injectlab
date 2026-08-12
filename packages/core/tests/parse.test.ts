@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { formatForPath, formatSpecErrors, parseSpec } from '../src/spec/parse.js';
+import type { InjectSpec } from '../src/spec/types.js';
 
 const VALID_YAML = `
 kind: news
@@ -13,6 +14,11 @@ body:
   - Northgate Utilities has taken its customer billing platform offline.
   - The regulator confirmed it had been notified.
 `;
+
+/** Headlines of the news injects, which is all these cases parse. */
+function headlinesOf(injects: readonly InjectSpec[]): string[] {
+  return injects.filter((inject) => inject.kind === 'news').map((inject) => inject.headline);
+}
 
 /** Returns the errors, failing the test if the parse unexpectedly succeeded. */
 function errorsOf(text: string, format: 'yaml' | 'json' = 'yaml') {
@@ -29,10 +35,14 @@ describe('parseSpec', () => {
 
     expect(result.injects).toHaveLength(1);
     const inject = result.injects[0];
+    // Narrowing rather than casting: the union is the point, and a test that casts past it
+    // would stop noticing when a field moves between kinds.
     expect(inject?.kind).toBe('news');
-    expect(inject?.outlet).toBe('bbc');
-    expect(inject?.byline).toBe('Helen Morrow');
-    expect(inject?.body).toHaveLength(2);
+    if (inject?.kind !== 'news') return;
+
+    expect(inject.outlet).toBe('bbc');
+    expect(inject.byline).toBe('Helen Morrow');
+    expect(inject.body).toHaveLength(2);
   });
 
   it('reads the same document as JSON', () => {
@@ -46,7 +56,7 @@ describe('parseSpec', () => {
     const result = parseSpec(json, 'json');
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.injects[0]?.headline).toBe('Billing systems offline');
+    expect(headlinesOf(result.injects)).toEqual(['Billing systems offline']);
   });
 
   it('normalises a top-level injects list to the same shape as a single inject', () => {
@@ -65,7 +75,7 @@ injects:
     const result = parseSpec(text, 'yaml');
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.injects.map((inject) => inject.headline)).toEqual(['First', 'Second']);
+    expect(headlinesOf(result.injects)).toEqual(['First', 'Second']);
   });
 
   it('drops keys that were absent rather than materialising them as undefined', () => {

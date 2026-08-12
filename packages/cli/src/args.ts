@@ -59,7 +59,8 @@ export interface RenderFlags {
   publishedAt?: string;
   url?: string;
   image?: string;
-  variant: InjectVariant;
+  /** Undefined when the flag was not given, so each kind keeps its own default. */
+  variant?: InjectVariant;
   out: string;
   format: 'png' | 'html';
   scale: 1 | 2 | 3;
@@ -118,7 +119,9 @@ export function parseFlags(argv: readonly string[]): RenderFlags {
     ...(values['published-at'] === undefined ? {} : { publishedAt: values['published-at'] }),
     ...(values.url === undefined ? {} : { url: values.url }),
     ...(values.image === undefined ? {} : { image: values.image }),
-    variant: oneOf('variant', values.variant, ['desktop', 'mobile', 'card'], 'desktop'),
+    ...(values.variant === undefined
+      ? {}
+      : { variant: oneOf('variant', values.variant, ['desktop', 'mobile', 'card'], 'desktop') }),
     out: values.out ?? 'out',
     format: oneOf('format', values.format, ['png', 'html'], 'png'),
     scale: Number(scale) as 1 | 2 | 3,

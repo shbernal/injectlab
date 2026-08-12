@@ -54,7 +54,7 @@ describe('renderInject', () => {
 
     expect(provenance.Comment).toContain('SYNTHETIC EXERCISE MATERIAL');
     expect(provenance['injectlab.kind']).toBe('news');
-    expect(provenance['injectlab.outlet']).toBe('bbc');
+    expect(provenance['injectlab.source']).toBe('bbc');
     expect(provenance['injectlab.generatedFrom']).toBe('acme.yaml');
     expect(provenance.Software).toMatch(/^injectlab \d+\.\d+\.\d+$/u);
   });
@@ -133,9 +133,9 @@ describe('renderAll', () => {
 
     expect(results).toHaveLength(9);
     expect(results.map((result) => result.index)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(results.map((result) => result.inject.headline)).toEqual(
-      batch.map((inject) => inject.headline),
-    );
+    expect(
+      results.map((result) => (result.inject.kind === 'news' ? result.inject.headline : '')),
+    ).toEqual(batch.map((inject) => inject.headline));
   });
 
   it('reuses the one renderer for the whole batch', async () => {

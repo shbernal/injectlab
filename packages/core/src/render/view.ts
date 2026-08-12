@@ -1,9 +1,7 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-
 import type { Outlet } from '../outlets/types.js';
 import type { NewsInject } from '../spec/types.js';
 import { formatByline, formatTimestamp } from '../text/locale.js';
+import { embedImage } from './image.js';
 
 /**
  * Everything a layout needs, already resolved.
@@ -30,47 +28,6 @@ export interface ArticleView {
 export interface ViewContext {
   /** Directory a relative `image.path` is resolved against, normally the spec file's own. */
   baseDir?: string;
-}
-
-const IMAGE_TYPES: Record<string, string> = {
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.webp': 'image/webp',
-  '.avif': 'image/avif',
-  '.gif': 'image/gif',
-};
-
-export class ImageError extends Error {
-  constructor(imagePath: string, cause: unknown) {
-    super(`cannot read image ${imagePath}: ${cause instanceof Error ? cause.message : cause}`);
-    this.name = 'ImageError';
-  }
-}
-
-/**
- * Images are embedded, not linked, for the same reason fonts are: the document has to be
- * self-contained and the render has to make no request. A path that does not resolve is an
- * error rather than a broken image, because a broken image in an exercise asset is the kind
- * of thing nobody notices until it is in front of the exercise cell.
- */
-async function embedImage(imagePath: string, baseDir: string | undefined): Promise<string> {
-  const resolved = baseDir === undefined ? imagePath : path.resolve(baseDir, imagePath);
-  const type = IMAGE_TYPES[path.extname(resolved).toLowerCase()];
-
-  if (type === undefined) {
-    throw new ImageError(
-      imagePath,
-      `unsupported extension, expected one of ${Object.keys(IMAGE_TYPES).join(', ')}`,
-    );
-  }
-
-  try {
-    const bytes = await readFile(resolved);
-    return `data:${type};base64,${bytes.toString('base64')}`;
-  } catch (error) {
-    throw new ImageError(imagePath, error);
-  }
 }
 
 /** A plausible article URL, so a layout with an address bar has something to show. */

@@ -76,20 +76,39 @@ export interface CharFinding {
   suggestion?: string;
 }
 
-/** Every user-authored string in a spec, with the path a person would use to find it. */
+/**
+ * Every user-authored string in a spec, with the path a person would use to find it.
+ *
+ * Adding a kind means adding a branch here. That is deliberate: a field that reaches the page
+ * but not this function is a field the gate silently does not cover, and a switch that fails
+ * the typecheck when a kind is added is the cheapest way to be told.
+ */
 export function userText(inject: InjectSpec, options?: DisclaimerContext): Map<string, string> {
   const fields = new Map<string, string>();
   const put = (field: string, value: string | undefined) => {
     if (value !== undefined && value !== '') fields.set(field, value);
   };
 
-  put('headline', inject.headline);
-  put('standfirst', inject.standfirst);
-  put('byline', inject.byline);
-  put('section', inject.section);
-  inject.body?.forEach((paragraph, index) => put(`body.${index}`, paragraph));
-  put('image.caption', inject.image?.caption);
-  put('image.credit', inject.image?.credit);
+  switch (inject.kind) {
+    case 'news': {
+      put('headline', inject.headline);
+      put('standfirst', inject.standfirst);
+      put('byline', inject.byline);
+      put('section', inject.section);
+      inject.body?.forEach((paragraph, index) => put(`body.${index}`, paragraph));
+      put('image.caption', inject.image?.caption);
+      put('image.credit', inject.image?.credit);
+      break;
+    }
+    case 'x-post': {
+      put('author.name', inject.author.name);
+      put('author.handle', inject.author.handle);
+      put('text', inject.text);
+      inject.thread?.forEach((post, index) => put(`thread.${index}`, post));
+      break;
+    }
+  }
+
   put('disclaimer', options?.disclaimer);
 
   return fields;

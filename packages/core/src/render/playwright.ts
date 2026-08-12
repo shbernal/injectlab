@@ -70,8 +70,19 @@ export class PlaywrightRenderer implements Renderer {
   async render(html: string, target: RenderTarget): Promise<Uint8Array> {
     const browser = await this.#ready();
 
+    const height = target.height;
+    const fullPage = height === undefined;
+
+    /**
+     * A small viewport for a full-page capture, not a tall one.
+     *
+     * `fullPage` grows to the scrollable height, and the body fills at least the viewport, so
+     * a 900px viewport pads every short document with up to 900px of empty background below
+     * the closing disclaimer band. A post is the obvious case, but the articles had it too.
+     * None of the layouts have height-dependent rules, so nothing else changes.
+     */
     const context = await browser.newContext({
-      viewport: { width: target.width, height: target.height ?? 900 },
+      viewport: { width: target.width, height: height ?? 100 },
       deviceScaleFactor: target.scale,
       colorScheme: 'light',
       reducedMotion: 'reduce',
@@ -87,7 +98,7 @@ export class PlaywrightRenderer implements Renderer {
       // guarantee beats depending on the mechanism staying true across Chromium versions.
       await page.evaluate(() => document.fonts.ready);
 
-      return await page.screenshot({ fullPage: target.height === undefined, type: 'png' });
+      return await page.screenshot({ fullPage, type: 'png' });
     } finally {
       await context.close();
     }

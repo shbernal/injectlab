@@ -46,7 +46,7 @@ export async function news(flags: RenderFlags, context: CliContext): Promise<num
     ...(flags.section === undefined ? {} : { section: flags.section }),
     ...(flags.url === undefined ? {} : { url: flags.url }),
     ...(flags.image === undefined ? {} : { image: { path: flags.image } }),
-    variant: flags.variant,
+    ...(flags.variant === undefined ? {} : { variant: flags.variant }),
   };
 
   return runRender([{ injects: [inject] }], flags, context);

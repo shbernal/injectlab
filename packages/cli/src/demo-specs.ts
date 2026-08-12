@@ -1,5 +1,5 @@
 import { listOutletIds } from '@injectlab/core';
-import type { NewsInject, OutletId } from '@injectlab/core';
+import type { InjectSpec, NewsInject, OutletId, XPostInject } from '@injectlab/core';
 
 /**
  * The specs `inject demo` renders.
@@ -46,8 +46,32 @@ const DEMOS: Record<OutletId, NewsInject> = {
   },
 };
 
-export function demoSpecs(): NewsInject[] {
-  return listOutletIds().map((id) => DEMOS[id]);
+/**
+ * The rumour chain.
+ *
+ * Same fictional company as the BBC demo, deliberately: rendered together the demo set reads
+ * as one scenario rather than as three unrelated samples, which is what an exercise actually
+ * looks like.
+ */
+const X_DEMO: XPostInject = {
+  kind: 'x-post',
+  author: {
+    name: 'Freight Watch UK',
+    handle: 'freightwatchuk',
+    verified: 'grey',
+  },
+  text: 'Hearing Northwind Logistics depots have been down since about 4am. Drivers being turned away at Daventry and Warrington. Anyone else seeing this?',
+  postedAt: '2026-08-12T07:05:00Z',
+  thread: [
+    'Update: a second source says it is a ransomware incident, not a systems outage. Northwind have not said anything publicly yet.',
+    'Northwind statement just out. They are calling it a "cyber incident", say depots are running on paper, and are not answering on customer data.',
+  ],
+  metrics: { replies: 184, reposts: 1240, likes: 3820, views: 412_000 },
+  theme: 'light',
+};
+
+export function demoSpecs(): InjectSpec[] {
+  return [...listOutletIds().map((id) => DEMOS[id]), X_DEMO];
 }
 
 export function demoFor(outlet: OutletId): NewsInject {

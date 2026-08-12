@@ -41,9 +41,16 @@ export function formatDate(instant: string, outlet: Outlet): string {
   }
 }
 
+/** Where a caller has no outlet, which is the case for a platform rather than a publication. */
+export interface TimeContext {
+  locale: string;
+  timeZone: string;
+}
+
 /** '09:14'. Twenty-four hour in both locales we care about, but the locale decides. */
-export function formatTime(instant: string, outlet: Outlet): string {
-  return formatter(outlet.locale, outlet.timeZone, {
+export function formatTime(instant: string, where: Outlet | TimeContext): string {
+  const { locale, timeZone } = where;
+  return formatter(locale, timeZone, {
     hour: '2-digit',
     minute: '2-digit',
   }).format(new Date(instant));

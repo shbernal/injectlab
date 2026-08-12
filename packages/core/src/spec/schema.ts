@@ -56,7 +56,44 @@ export const NewsInjectSchema = v.object({
   variant: v.exactOptional(v.picklist(['desktop', 'mobile', 'card'])),
 });
 
-export const InjectSpecSchema = v.variant('kind', [NewsInjectSchema]);
+const handle = v.pipe(
+  v.string(),
+  v.regex(
+    /^[A-Za-z0-9_]{1,15}$/u,
+    'a handle is 1 to 15 letters, digits or underscores, with no at sign',
+  ),
+);
+
+const count = v.pipe(v.number(), v.integer(), v.minValue(0));
+
+export const XPostInjectSchema = v.object({
+  kind: v.literal('x-post'),
+  author: v.object({
+    name: nonEmpty('author.name'),
+    handle,
+    verified: v.exactOptional(v.union([v.picklist(['blue', 'gold', 'grey']), v.literal(false)])),
+    avatar: v.exactOptional(v.string()),
+  }),
+  text: nonEmpty('text'),
+  postedAt: isoInstant,
+  thread: v.exactOptional(v.array(v.string())),
+  metrics: v.exactOptional(
+    v.object({
+      replies: v.exactOptional(count),
+      reposts: v.exactOptional(count),
+      likes: v.exactOptional(count),
+      views: v.exactOptional(count),
+    }),
+  ),
+  theme: v.exactOptional(v.picklist(['light', 'dim', 'dark'])),
+});
+
+/**
+ * Dispatching on `kind` rather than unioning the two object schemas: `v.variant` reports the
+ * failure against the discriminator and keeps the field paths, which a plain union throws
+ * away. Same reason `parse.ts` picks the batch schema by shape.
+ */
+export const InjectSpecSchema = v.variant('kind', [NewsInjectSchema, XPostInjectSchema]);
 
 /**
  * A file may hold one inject or a list of them, and `parse.ts` picks the schema by looking

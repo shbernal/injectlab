@@ -1,0 +1,33 @@
+# The rumour chain that runs alongside demos/bbc-ransomware.yaml.
+#
+# Same fictional company, deliberately: rendered together the demo set reads as one scenario
+# rather than as unrelated samples, which is what an exercise actually looks like. The three
+# posts escalate from "anyone else seeing this" to a company statement.
+#
+#   inject render demos/x-rumour-thread.yaml
+
+kind: x-post
+
+author:
+  name: Freight Watch UK
+  handle: freightwatchuk
+  # blue, gold, grey, or false. The badge is a redrawn circle and check, not the real mark.
+  verified: grey
+
+postedAt: 2026-08-12T07:05:00Z
+
+text: Hearing Northwind Logistics depots have been down since about 4am. Drivers being turned away at Daventry and Warrington. Anyone else seeing this?
+
+# Continuation posts by the same author, drawn as one connected thread in one image.
+thread:
+  - 'Update: a second source says it is a ransomware incident, not a systems outage. Northwind have not said anything publicly yet.'
+  - 'Northwind statement just out. They are calling it a "cyber incident", say depots are running on paper, and are not answering on customer data.'
+
+metrics:
+  replies: 184
+  reposts: 1240
+  likes: 3820
+  views: 412000
+
+# light, dim or dark.
+theme: light

@@ -7,7 +7,7 @@ import {
   renderAll,
   targetFor,
 } from '@injectlab/core';
-import type { NewsInject, Renderer } from '@injectlab/core';
+import type { InjectSpec, Renderer } from '@injectlab/core';
 
 import { EXIT_CHARS, EXIT_OK, EXIT_RENDER } from './args.js';
 import type { RenderFlags } from './args.js';
@@ -23,7 +23,7 @@ import type { CliContext } from './context.js';
  */
 
 export interface RenderJob {
-  injects: NewsInject[];
+  injects: InjectSpec[];
   /** Directory a relative image path resolves against, and the name recorded in the PNG. */
   baseDir?: string;
   generatedFrom?: string;
@@ -118,7 +118,10 @@ async function renderPngs(
       const results = await renderAll(job.injects, {
         renderer,
         chars: flags.chars,
-        target: targetFor(flags.variant, flags.scale),
+        scale: flags.scale,
+        // Only when the user asked for one. Left out, each kind keeps its own natural
+        // target, so a post is drawn as a card rather than centred in an article viewport.
+        ...(flags.variant === undefined ? {} : { target: targetFor(flags.variant, flags.scale) }),
         ...(flags.disclaimer === '' ? {} : { disclaimer: flags.disclaimer }),
         ...(job.baseDir === undefined ? {} : { baseDir: job.baseDir }),
         ...(job.generatedFrom === undefined ? {} : { generatedFrom: job.generatedFrom }),

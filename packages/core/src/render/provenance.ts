@@ -17,7 +17,8 @@ export interface Provenance {
   /** `injectlab <version>`. */
   software: string;
   kind: string;
-  outlet: string;
+  /** Outlet id for news, platform id for a post. See `sourceOf`. */
+  source: string;
   /** Spec file basename, when rendering from a file. */
   generatedFrom?: string;
 }
@@ -142,7 +143,7 @@ export function addProvenance(source: Uint8Array, provenance: Provenance): Uint8
     ['Software', provenance.software],
     ['Comment', PROVENANCE_COMMENT],
     ['injectlab.kind', provenance.kind],
-    ['injectlab.outlet', provenance.outlet],
+    ['injectlab.source', provenance.source],
     ...(provenance.generatedFrom === undefined
       ? []
       : ([['injectlab.generatedFrom', provenance.generatedFrom]] as [string, string][])),

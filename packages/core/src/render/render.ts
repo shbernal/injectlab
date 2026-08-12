@@ -2,9 +2,10 @@ import { readFile } from 'node:fs/promises';
 
 import { gate } from '../text/chars.js';
 import type { CharFinding } from '../text/chars.js';
-import type { CharPolicy, InjectVariant, NewsInject } from '../spec/types.js';
+import type { CharPolicy, InjectSpec, InjectVariant } from '../spec/types.js';
 import { buildDocument } from './compose.js';
 import type { ComposeOptions } from './compose.js';
+import { X_PLATFORM } from './platforms/x.js';
 import { addProvenance } from './provenance.js';
 import type { Renderer, RenderTarget } from './renderer.js';
 
@@ -36,6 +37,32 @@ export function targetFor(variant: InjectVariant = 'desktop', scale: 1 | 2 | 3 =
   return { ...VARIANTS[variant], scale, format: 'png' };
 }
 
+/**
+ * What produced this inject: an outlet id for news, a platform id for a post.
+ *
+ * One field rather than two, because provenance is read by whoever finds a stray PNG and
+ * they do not care which of our internal registries the value came out of. It is also why
+ * the chunk is called `injectlab.source` and not `injectlab.outlet`: naming it after outlets
+ * would have been the same conflation the X kind exists to avoid.
+ */
+export function sourceOf(inject: InjectSpec): string {
+  return inject.kind === 'news' ? inject.outlet : X_PLATFORM.id;
+}
+
+/**
+ * The target an inject wants when the caller has not dictated one.
+ *
+ * Posts are drawn at a fixed card width, because a post is a card and not a page. Articles
+ * are drawn at their variant's viewport. This is why a caller should pass `scale` rather than
+ * a whole `target` unless it genuinely means to override the width: passing an article
+ * viewport for a post produces a correct post floating in a page of empty space.
+ */
+function targetOf(inject: InjectSpec, scale: 1 | 2 | 3 = 2): RenderTarget {
+  return inject.kind === 'news'
+    ? targetFor(inject.variant, scale)
+    : { width: 640, scale, format: 'png' };
+}
+
 let cachedVersion: string | undefined;
 
 /** Read rather than hardcoded, so the provenance cannot claim a version that is not shipping. */
@@ -54,8 +81,10 @@ async function packageVersion(): Promise<string> {
 
 export interface RenderInjectOptions extends ComposeOptions {
   renderer: Renderer;
-  /** Defaults to the inject's variant at scale 2. */
+  /** Overrides the width as well. Prefer `scale` unless the width is meant to change. */
   target?: RenderTarget;
+  /** Applied to whatever target the inject asks for. Default 2. */
+  scale?: 1 | 2 | 3;
   /** Defaults to `error`, which rejects rather than rendering banned characters. */
   chars?: CharPolicy;
   /** Spec file basename, recorded in the PNG. */
@@ -69,7 +98,7 @@ export interface RenderResult {
 }
 
 export async function renderInject(
-  inject: NewsInject,
+  inject: InjectSpec,
   options: RenderInjectOptions,
 ): Promise<RenderResult> {
   const { findings } = await gate(
@@ -79,14 +108,14 @@ export async function renderInject(
   );
 
   const document = await buildDocument(inject, options);
-  const target = options.target ?? targetFor(inject.variant);
+  const target = options.target ?? targetOf(inject, options.scale);
   const png = await options.renderer.render(document, target);
 
   return {
     png: addProvenance(png, {
       software: `injectlab ${await packageVersion()}`,
       kind: inject.kind,
-      outlet: inject.outlet,
+      source: sourceOf(inject),
       ...(options.generatedFrom === undefined ? {} : { generatedFrom: options.generatedFrom }),
     }),
     findings,
@@ -103,7 +132,7 @@ export async function renderInject(
 const CONCURRENCY = 4;
 
 export interface BatchResult extends RenderResult {
-  inject: NewsInject;
+  inject: InjectSpec;
   index: number;
 }
 
@@ -114,7 +143,7 @@ export interface BatchResult extends RenderResult {
  * is not the main cost, which is the screenshot itself.
  */
 export async function renderAll(
-  injects: readonly NewsInject[],
+  injects: readonly InjectSpec[],
   options: RenderInjectOptions,
 ): Promise<BatchResult[]> {
   const results = Array.from<BatchResult | undefined>({ length: injects.length });

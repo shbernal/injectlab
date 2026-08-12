@@ -9,7 +9,7 @@ import {
 } from '../src/render/provenance.js';
 import { tinyPng } from './png-fixture.js';
 
-const PROVENANCE = { software: 'injectlab 0.0.0', kind: 'news', outlet: 'bbc' };
+const PROVENANCE = { software: 'injectlab 0.0.0', kind: 'news', source: 'bbc' };
 
 describe('addProvenance', () => {
   it('round trips every key it wrote', () => {
@@ -18,7 +18,7 @@ describe('addProvenance', () => {
       Software: 'injectlab 0.0.0',
       Comment: PROVENANCE_COMMENT,
       'injectlab.kind': 'news',
-      'injectlab.outlet': 'bbc',
+      'injectlab.source': 'bbc',
       'injectlab.generatedFrom': 'acme.yaml',
     });
   });
@@ -58,9 +58,9 @@ describe('addProvenance', () => {
    */
   it('replaces its own records on a second pass instead of stacking them', () => {
     const once = addProvenance(tinyPng(), PROVENANCE);
-    const twice = addProvenance(once, { ...PROVENANCE, outlet: 'lemonde' });
+    const twice = addProvenance(once, { ...PROVENANCE, source: 'lemonde' });
 
-    expect(readProvenance(twice)['injectlab.outlet']).toBe('lemonde');
+    expect(readProvenance(twice)['injectlab.source']).toBe('lemonde');
     // Grows only by the difference in the value itself, so the old chunks are gone rather
     // than sitting behind the new ones.
     expect(twice.length).toBe(once.length + ('lemonde'.length - 'bbc'.length));
@@ -75,7 +75,7 @@ describe('addProvenance', () => {
 
   /** tEXt is Latin-1 by the specification, so anything outside it is dropped, not mangled. */
   it('drops characters a tEXt chunk cannot hold', () => {
-    const marked = addProvenance(tinyPng(), { ...PROVENANCE, outlet: 'ab中文cd' });
-    expect(readProvenance(marked)['injectlab.outlet']).toBe('abcd');
+    const marked = addProvenance(tinyPng(), { ...PROVENANCE, source: 'ab中文cd' });
+    expect(readProvenance(marked)['injectlab.source']).toBe('abcd');
   });
 });

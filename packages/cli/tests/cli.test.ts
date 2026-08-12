@@ -9,6 +9,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { EXIT_CHARS, EXIT_OK, EXIT_RENDER, EXIT_SPEC, EXIT_USAGE, run } from '../src/index.js';
 import type { CliContext } from '../src/context.js';
+import { demoSpecs } from '../src/demo-specs.js';
 import { tinyPng } from './png-fixture.js';
 
 /**
@@ -314,21 +315,21 @@ publishedAt: 2026-08-12T09:14:00+01:00
 });
 
 describe('demo', () => {
-  it('renders one asset per outlet with no arguments beyond the destination', async () => {
+  it('renders every built-in demo with no arguments beyond the destination', async () => {
     const h = harness();
     expect(await run(['demo', '--out', h.dir], h.context)).toBe(EXIT_OK);
 
-    // Derived from the registry, so adding an outlet does not make this test wrong.
-    const expected = listOutletIds().length;
+    // Derived rather than counted, so adding an outlet or a kind does not make this wrong.
+    const expected = demoSpecs().length;
     expect((await readdir(h.dir)).filter((file) => file.endsWith('.png'))).toHaveLength(expected);
   });
 
-  it('names every asset after the outlet that produced it', async () => {
+  it('covers every outlet, and the platform as well', async () => {
     const h = harness();
     await run(['demo', '--out', h.dir], h.context);
     const files = await readdir(h.dir);
 
-    for (const id of listOutletIds()) {
+    for (const id of [...listOutletIds(), 'x']) {
       expect(
         files.some((file) => file.includes(`-${id}-`)),
         id,
@@ -348,7 +349,7 @@ describe('--json', () => {
 
     const { outputs } = report as { outputs: Record<string, unknown>[] };
     expect(outputs).toHaveLength(1);
-    expect(outputs[0]).toMatchObject({ kind: 'news', outlet: 'bbc', width: 2400, height: 900 });
+    expect(outputs[0]).toMatchObject({ kind: 'news', source: 'bbc', width: 2400, height: 900 });
     expect(typeof outputs[0]?.bytes).toBe('number');
   });
 

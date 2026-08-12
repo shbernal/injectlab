@@ -15,12 +15,21 @@ export type {
   InjectVariant,
   NewsInject,
   RenderOptions,
+  XAuthor,
+  XMetrics,
+  XPostInject,
+  XTheme,
 } from './spec/types.js';
 
 export { formatForPath, formatSpecErrors, parseSpec } from './spec/parse.js';
 export type { ParseResult, SpecError, SpecFormat } from './spec/parse.js';
 
-export { BatchSchema, InjectSpecSchema, NewsInjectSchema } from './spec/schema.js';
+export {
+  BatchSchema,
+  InjectSpecSchema,
+  NewsInjectSchema,
+  XPostInjectSchema,
+} from './spec/schema.js';
 
 export type {
   DateFormat,
@@ -47,6 +56,7 @@ export { CharPolicyError, formatCharFindings, gate, scanInject, userText } from 
 export type { CharFinding, DisclaimerContext, GateResult } from './text/chars.js';
 
 export { formatByline, formatDate, formatTime, formatTimestamp } from './text/locale.js';
+export type { TimeContext } from './text/locale.js';
 
 export { buildDocument } from './render/compose.js';
 export type { ComposeOptions } from './render/compose.js';
@@ -68,10 +78,14 @@ export {
   readProvenance,
 } from './render/provenance.js';
 export type { Provenance } from './render/provenance.js';
-export { renderAll, renderInject, targetFor } from './render/render.js';
+export { renderAll, renderInject, sourceOf, targetFor } from './render/render.js';
 export type { BatchResult, RenderInjectOptions, RenderResult } from './render/render.js';
-export { ImageError, buildView } from './render/view.js';
+export { buildView } from './render/view.js';
 export type { ArticleView, ViewContext } from './render/view.js';
+export { ImageError, embedImage } from './render/image.js';
+export { X_PLATFORM, xTheme, xThemes } from './render/platforms/x.js';
+export type { PlatformTheme } from './render/platforms/x.js';
+export { avatarColor, formatMetric, initials } from './render/layouts/x-post.js';
 
 /**
  * `PlaywrightRenderer` is deliberately not re-exported here. Importing it pulls in

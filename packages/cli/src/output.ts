@@ -1,8 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import { pngSize } from '@injectlab/core';
-import type { CharFinding, NewsInject } from '@injectlab/core';
+import { pngSize, sourceOf } from '@injectlab/core';
+import type { CharFinding, InjectSpec } from '@injectlab/core';
 
 /**
  * Where results go and how they are reported.
@@ -15,7 +15,8 @@ import type { CharFinding, NewsInject } from '@injectlab/core';
 export interface WrittenOutput {
   path: string;
   kind: string;
-  outlet: string;
+  /** Outlet id for news, platform id for a post. */
+  source: string;
   bytes: number;
   width?: number;
   height?: number;
@@ -27,9 +28,16 @@ export interface JsonReport {
   findings: (CharFinding & { spec?: string })[];
 }
 
-/** A stable, filesystem-safe name derived from the headline, so a batch does not collide. */
-export function slugFor(inject: NewsInject, index: number): string {
-  const slug = inject.headline
+/**
+ * A stable, filesystem-safe name for one result.
+ *
+ * Derived from whatever that kind's headline text is, so a batch of twenty does not collide
+ * and the directory listing is readable without opening anything.
+ */
+export function slugFor(inject: InjectSpec, index: number): string {
+  const title = inject.kind === 'news' ? inject.headline : `${inject.author.handle} ${inject.text}`;
+
+  const slug = title
     .toLowerCase()
     .normalize('NFD')
     .replaceAll(/[̀-ͯ]/gu, '')
@@ -39,7 +47,7 @@ export function slugFor(inject: NewsInject, index: number): string {
     .slice(0, 6)
     .join('-');
 
-  return `${String(index + 1).padStart(2, '0')}-${inject.outlet}-${slug || 'inject'}`;
+  return `${String(index + 1).padStart(2, '0')}-${sourceOf(inject)}-${slug || 'inject'}`;
 }
 
 /**
@@ -52,7 +60,7 @@ export function slugFor(inject: NewsInject, index: number): string {
 export function resolveOutPath(
   out: string,
   extension: string,
-  inject: NewsInject,
+  inject: InjectSpec,
   index: number,
   total: number,
 ): string {
@@ -63,7 +71,7 @@ export function resolveOutPath(
 export async function writeOutput(
   target: string,
   data: Uint8Array | string,
-  inject: NewsInject,
+  inject: InjectSpec,
 ): Promise<WrittenOutput> {
   await mkdir(path.dirname(path.resolve(target)), { recursive: true });
   await writeFile(target, data);
@@ -72,7 +80,7 @@ export async function writeOutput(
   return {
     path: target,
     kind: inject.kind,
-    outlet: inject.outlet,
+    source: sourceOf(inject),
     bytes,
     ...(typeof data === 'string' ? undefined : trySize(data)),
   };
