@@ -1,0 +1,41 @@
+{
+  "name": "injectlab",
+  "version": "0.0.0",
+  "description": "Generate realistic crisis-exercise stimuli as image assets",
+  "author": "shbernal",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.11.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shbernal/injectlab.git"
+  },
+  "homepage": "https://github.com/shbernal/injectlab#readme",
+  "bugs": {
+    "url": "https://github.com/shbernal/injectlab/issues"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "lint": "oxlint --max-warnings 0",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt",
+    "test": "vitest run",
+    "lint:chars": "charcheck",
+    "check": "pnpm run typecheck && pnpm run lint && pnpm run format && pnpm run test && pnpm run build && pnpm run lint:chars"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "charcheck": "^0.2.3",
+    "micromark": "^4.0.2",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

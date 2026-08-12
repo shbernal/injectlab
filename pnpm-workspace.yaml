@@ -1,0 +1,4 @@
+packages:
+  - 'packages/*'
+minimumReleaseAgeExclude:
+  - charcheck@0.2.3

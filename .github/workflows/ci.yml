@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # typecheck, lint, format, test, build, then charcheck over this repo.
+      # Render tests are skipped here: they need a Chromium download, and whether CI pays
+      # that cost is a decision for the renderer, not for the scaffold.
+      - run: pnpm run check
+        env:
+          INJECTLAB_SKIP_RENDER_TESTS: '1'
