@@ -43,6 +43,8 @@
     "build": "tsc -b"
   },
   "dependencies": {
-    "charcheck": "^0.2.3"
+    "charcheck": "^0.2.3",
+    "valibot": "^1.4.2",
+    "yaml": "^2.9.0"
   }
 }
