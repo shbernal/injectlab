@@ -124,11 +124,12 @@ This tool fabricates convincing press coverage attributed to real organisations.
 normal and necessary for crisis exercises, and it is also the raw material of a real hoax. The
 position is stated plainly rather than buried:
 
-- **The disclaimer is on by default.** Two `[EXERCISE, EXERCISE, EXERCISE]` bands, top and
-  bottom, because the realistic way an asset loses its framing is someone screenshotting half
-  of it out of an email.
+- **The disclaimer is on by default.** `[EXERCISE, EXERCISE, EXERCISE]` in red across the top
+  of every asset. `--disclaimer-style band` draws the loud yellow version at both ends
+  instead, and it is the only one that survives someone screenshotting half of an asset out of
+  an email.
 - **The embedded provenance is not switchable.** Every PNG carries metadata marking it as
-  synthetic exercise material, whether or not the visible bands are on.
+  synthetic exercise material, whether or not the visible band is on.
 - **Marks and typefaces are approximations, never the real assets.** No logo file and no
   licensed font binary is in this repository. Each outlet records what it approximates; read
   them with `inject outlets --verbose`.

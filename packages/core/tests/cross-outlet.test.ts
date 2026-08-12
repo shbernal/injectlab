@@ -80,11 +80,13 @@ describe('two outlets, one story', () => {
     expect(lemonde).toContain('lang="fr-FR"');
   });
 
-  /** The framing is the one thing that must not vary by outlet. */
+  /** The framing is the one thing that must not vary by outlet, in wording or in style. */
   it('share the disclaimer band, character for character', () => {
-    const band = /<div class="il-exercise il-exercise--top">([^<]*)<\/div>/u;
-    expect(band.exec(bbc)?.[1]).toBe(band.exec(lemonde)?.[1]);
-    expect(band.exec(bbc)?.[1]).toBe('[EXERCISE, EXERCISE, EXERCISE]');
+    const band = /<div class="il-exercise (il-exercise--\w+ il-exercise--top)">([^<]*)<\/div>/u;
+    for (const document of [bbc, lemonde, freesheet]) {
+      expect(band.exec(document)?.[1]).toBe('il-exercise--bold il-exercise--top');
+      expect(band.exec(document)?.[2]).toBe('[EXERCISE, EXERCISE, EXERCISE]');
+    }
   });
 });
 

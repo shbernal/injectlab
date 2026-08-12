@@ -4,7 +4,13 @@ import type { LayoutFamily, Outlet } from '../outlets/types.js';
 import type { InjectSpec, NewsInject, XPostInject } from '../spec/types.js';
 import { formatTime } from '../text/locale.js';
 import { RESET, themeVariables } from './css.js';
-import { DEFAULT_DISCLAIMER, DISCLAIMER_CSS, disclaimerBand } from './disclaimer.js';
+import {
+  DEFAULT_DISCLAIMER,
+  DEFAULT_DISCLAIMER_STYLE,
+  DISCLAIMER_CSS,
+  disclaimerBand,
+} from './disclaimer.js';
+import type { DisclaimerStyle } from './disclaimer.js';
 import { fontFaceCss, typefaceDataUri } from './fonts.js';
 import { html, raw, toHtmlString } from './html.js';
 import type { Html } from './html.js';
@@ -38,6 +44,8 @@ const LAYOUTS: Record<LayoutFamily, { css: string; render: (view: ArticleView) =
 export interface ComposeOptions extends ViewContext {
   /** Banner text, or `NO_DISCLAIMER` to omit the bands. */
   disclaimer?: string;
+  /** How loudly to draw it, and how many bands. Defaults to `bold`. */
+  disclaimerStyle?: DisclaimerStyle;
 }
 
 export async function buildDocument(
@@ -67,6 +75,7 @@ async function composeNews(inject: NewsInject, options: ComposeOptions): Promise
       layout.css,
     ],
     disclaimer: options.disclaimer ?? DEFAULT_DISCLAIMER,
+    disclaimerStyle: options.disclaimerStyle ?? DEFAULT_DISCLAIMER_STYLE,
     content: layout.render(view),
   });
 }
@@ -89,6 +98,7 @@ async function composeXPost(inject: XPostInject, options: ComposeOptions): Promi
     title: `${inject.author.name} on ${theme.name}`,
     styles: [await platformFontCss(), platformVariables(theme), RESET, DISCLAIMER_CSS, X_POST_CSS],
     disclaimer: options.disclaimer ?? DEFAULT_DISCLAIMER,
+    disclaimerStyle: options.disclaimerStyle ?? DEFAULT_DISCLAIMER_STYLE,
     content: xPost({
       inject,
       theme,
@@ -150,10 +160,16 @@ interface Page {
   title: string;
   styles: readonly string[];
   disclaimer: string;
+  disclaimerStyle: DisclaimerStyle;
   content: Html;
 }
 
-function page({ lang, title, styles, disclaimer, content }: Page): Html {
+function page({ lang, title, styles, disclaimer, disclaimerStyle, content }: Page): Html {
+  // Asked for at both ends unconditionally. Whether either is drawn is the style's decision,
+  // and a style that declines one returns nothing rather than an empty element.
+  const band = (position: 'top' | 'bottom') =>
+    disclaimerBand(disclaimer, position, disclaimerStyle);
+
   // The `lang` attribute is the source's, not the host's. It drives hyphenation and quote
   // rendering, and a French article marked `en` is subtly wrong in a way nobody can name.
   return html`<!doctype html>
@@ -166,7 +182,7 @@ function page({ lang, title, styles, disclaimer, content }: Page): Html {
         </style>
       </head>
       <body>
-        ${disclaimerBand(disclaimer, 'top')} ${content} ${disclaimerBand(disclaimer, 'bottom')}
+        ${band('top')} ${content} ${band('bottom')}
       </body>
     </html> `;
 }

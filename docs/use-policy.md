@@ -15,9 +15,26 @@ should already know an exercise is running.
 ## What the tool does about it
 
 **The disclaimer is on by default.** Every rendered asset carries a visible
-`[EXERCISE, EXERCISE, EXERCISE]` banner, at the top and at the bottom. Two bands, not one,
-because the realistic way an asset loses its framing is someone screenshotting the interesting
-half out of an email, and the second band survives that.
+`[EXERCISE, EXERCISE, EXERCISE]` banner. `--disclaimer-style` chooses how it is drawn, and all
+three presets carry the same words:
+
+| Style   |                                                                      |
+| ------- | -------------------------------------------------------------------- |
+| `bold`  | red wording, no fill, top of the asset only. The default.            |
+| `band`  | a yellow band with red rules, top **and** bottom. The loudest.       |
+| `quiet` | small letters in the page's own muted grey over a hairline, top only |
+
+The default is one band rather than two, and that is a real concession worth stating. The
+realistic way an asset loses its framing is someone screenshotting the interesting half out of
+an email, and a second band at the bottom survives that where a single top line does not. It
+was made the default anyway, because the disclaimer an exercise designer will not crop off is
+worth more than the one they will, and a yellow band across a screenshot pasted into an
+already-marked exercise email is the kind of thing that gets removed by hand. Use `band` when
+the asset will travel on its own, and it is one flag.
+
+What no preset does is change the words, shrink them below legibility, or move them off the
+first screen. A style that made an artefact harder to identify as synthetic would be the
+feature this document exists to refuse.
 
 `--disclaimer none` exists for designers who compose their own framing around the asset.
 
@@ -31,7 +48,7 @@ injectlab.kind     news, x-post, ...
 injectlab.source   the outlet or platform id
 ```
 
-This is written whether or not the visible bands are. The band serves the person looking at
+This is written whether or not the visible band is. The band serves the person looking at
 the asset; the metadata serves whoever finds the file six months later with no idea where it
 came from. Read it back with any PNG metadata tool, or `readProvenance` from
 `@injectlab/core`.
@@ -82,8 +99,9 @@ single change the whole arrangement exists to prevent.
 - **Use fictional company names**, as every demo and every example in this repository does.
   The moment an artefact names a real organisation, the cost of it escaping the exercise stops
   being yours.
-- **Keep the bands on** unless you are placing the asset inside framing you control end to
-  end, in a document that is itself marked.
+- **Keep the disclaimer on** unless you are placing the asset inside framing you control end to
+  end, in a document that is itself marked. If the asset will be seen on its own rather than
+  inside that framing, `--disclaimer-style band` is the one to reach for.
 - **Do not post artefacts anywhere public**, including internal channels that outlive the
   exercise, without the framing attached.
 - **Delete the asset folder when the exercise is over.** They are cheap to regenerate from the

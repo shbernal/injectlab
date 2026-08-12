@@ -142,6 +142,12 @@ describe('flag validation', () => {
     expect(await run(['news', '--outlet', 'bbc'], h.context)).toBe(EXIT_USAGE);
     expect(h.err.join('\n')).toContain('needs --headline');
   });
+
+  it('names the disclaimer styles rather than accepting an invented one', async () => {
+    const h = harness();
+    expect(await run([...NEWS, '--disclaimer-style', 'invisible'], h.context)).toBe(EXIT_USAGE);
+    expect(h.err.join('\n')).toContain('--disclaimer-style must be one of: bold, band, quiet');
+  });
 });
 
 describe('news', () => {
@@ -203,6 +209,17 @@ describe('--format html', () => {
     expect(document).toContain('<!doctype html>');
     expect(document).toContain('Northwind Logistics hit by ransomware');
     expect(h.renderer.calls).toHaveLength(0);
+  });
+
+  /** The one place the flag can be checked against what actually reaches the page. */
+  it('carries --disclaimer-style through to the composed document', async () => {
+    const h = harness();
+    const flags = ['--format', 'html', '--disclaimer-style', 'band', '--out', h.dir];
+    expect(await run([...NEWS, ...flags], h.context)).toBe(EXIT_OK);
+
+    const files = await readdir(h.dir);
+    const document = await readFile(path.join(h.dir, files[0] ?? ''), 'utf8');
+    expect(document).toContain('il-exercise--band il-exercise--bottom');
   });
 });
 

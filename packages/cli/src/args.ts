@@ -1,7 +1,12 @@
 import { parseArgs } from 'node:util';
 
-import { isOutletId, listOutletIds } from '@injectlab/core';
-import type { CharPolicy, InjectVariant, OutletId } from '@injectlab/core';
+import {
+  DEFAULT_DISCLAIMER_STYLE,
+  DISCLAIMER_STYLES,
+  isOutletId,
+  listOutletIds,
+} from '@injectlab/core';
+import type { CharPolicy, DisclaimerStyle, InjectVariant, OutletId } from '@injectlab/core';
 
 /**
  * Flag parsing.
@@ -43,6 +48,7 @@ const OPTIONS = {
   format: { type: 'string' },
   scale: { type: 'string' },
   disclaimer: { type: 'string' },
+  'disclaimer-style': { type: 'string' },
   chars: { type: 'string' },
   'allow-remote': { type: 'boolean', default: false },
   json: { type: 'boolean', default: false },
@@ -66,6 +72,8 @@ export interface RenderFlags {
   format: 'png' | 'html';
   scale: 1 | 2 | 3;
   disclaimer: string;
+  /** Undefined when the flag was not given, so the composer keeps ownership of the default. */
+  disclaimerStyle?: DisclaimerStyle;
   chars: CharPolicy;
   /**
    * Permits fetching a masthead a spec named by URL. Off by default: a spec file is something
@@ -132,6 +140,16 @@ export function parseFlags(argv: readonly string[]): RenderFlags {
     format: oneOf('format', values.format, ['png', 'html'], 'png'),
     scale: Number(scale) as 1 | 2 | 3,
     disclaimer: values.disclaimer ?? '',
+    ...(values['disclaimer-style'] === undefined
+      ? {}
+      : {
+          disclaimerStyle: oneOf(
+            'disclaimer-style',
+            values['disclaimer-style'],
+            DISCLAIMER_STYLES,
+            DEFAULT_DISCLAIMER_STYLE,
+          ),
+        }),
     chars: oneOf('chars', values.chars, ['error', 'warn', 'off'], 'error'),
     allowRemote: values['allow-remote'],
     json: values.json,

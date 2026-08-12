@@ -116,6 +116,7 @@ async function writeDocuments(
     for (const inject of job.injects) {
       const document = await buildDocument(inject, {
         ...(flags.disclaimer === '' ? {} : { disclaimer: flags.disclaimer }),
+        ...(flags.disclaimerStyle === undefined ? {} : { disclaimerStyle: flags.disclaimerStyle }),
         ...(job.baseDir === undefined ? {} : { baseDir: job.baseDir }),
         ...(remoteAssets.size === 0 ? {} : { remoteAssets }),
       });
@@ -151,6 +152,7 @@ async function renderPngs(
         // target, so a post is drawn as a card rather than centred in an article viewport.
         ...(flags.variant === undefined ? {} : { target: targetFor(flags.variant, flags.scale) }),
         ...(flags.disclaimer === '' ? {} : { disclaimer: flags.disclaimer }),
+        ...(flags.disclaimerStyle === undefined ? {} : { disclaimerStyle: flags.disclaimerStyle }),
         ...(job.baseDir === undefined ? {} : { baseDir: job.baseDir }),
         ...(job.generatedFrom === undefined ? {} : { generatedFrom: job.generatedFrom }),
         ...(remoteAssets.size === 0 ? {} : { remoteAssets }),

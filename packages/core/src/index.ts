@@ -64,10 +64,13 @@ export { buildDocument } from './render/compose.js';
 export type { ComposeOptions } from './render/compose.js';
 export {
   DEFAULT_DISCLAIMER,
+  DEFAULT_DISCLAIMER_STYLE,
   DISCLAIMER_CSS,
+  DISCLAIMER_STYLES,
   NO_DISCLAIMER,
   disclaimerBand,
 } from './render/disclaimer.js';
+export type { DisclaimerStyle } from './render/disclaimer.js';
 export { escapeHtml, html, raw, toHtmlString } from './render/html.js';
 export type { Html } from './render/html.js';
 export { DEFAULT_TARGET } from './render/renderer.js';

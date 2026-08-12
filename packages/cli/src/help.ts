@@ -14,6 +14,12 @@ Render flags (shared by demo, news and render):
   --variant desktop|mobile|card
   --disclaimer <text|none>  banner text. Default: [EXERCISE, EXERCISE, EXERCISE]
                             'none' omits the bands. Embedded PNG provenance is not affected.
+  --disclaimer-style bold|band|quiet
+                            how it is drawn. Default: bold
+                              bold   red wording, no fill, top of the asset only
+                              band   yellow band with red rules, top and bottom. The loudest,
+                                     and the only one that survives a crop of the first line.
+                              quiet  small grey letters over a hairline, top only
   --chars error|warn|off    what to do about banned characters. Default: error
   --allow-remote            permit fetching a masthead a spec names by URL. Off by default,
                             so rendering someone else's spec does not reach a host they chose.
@@ -38,8 +44,8 @@ Commands:
 Run 'inject <command> --help' for the flags of one command.
 
 Every generated asset carries an [EXERCISE, EXERCISE, EXERCISE] banner unless it is turned
-off, and every PNG carries embedded metadata marking it as synthetic exercise material.
-That metadata is not switchable.
+off. --disclaimer-style band draws it at its loudest, top and bottom. Every PNG also carries
+embedded metadata marking it as synthetic exercise material, and that is not switchable.
 `.trim();
 
 export const DEMO = `

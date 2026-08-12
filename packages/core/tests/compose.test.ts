@@ -4,11 +4,26 @@ import { describe, expect, it } from 'vitest';
 import { getOutlet } from '../src/outlets/registry.js';
 import type { Outlet } from '../src/outlets/types.js';
 import { buildDocument } from '../src/render/compose.js';
-import { NO_DISCLAIMER } from '../src/render/disclaimer.js';
+import {
+  DEFAULT_DISCLAIMER,
+  DISCLAIMER_CSS,
+  DISCLAIMER_STYLES,
+  NO_DISCLAIMER,
+} from '../src/render/disclaimer.js';
 import { toHtmlString } from '../src/render/html.js';
 import { frOnlineDaily } from '../src/render/layouts/fr-online-daily.js';
 import { buildView } from '../src/render/view.js';
 import type { NewsInject } from '../src/spec/types.js';
+
+/**
+ * The style and position modifiers on each band drawn, in document order.
+ *
+ * Matched on the markup rather than counted across the whole document, since the same class
+ * names appear again in the stylesheet, where all three styles are always defined.
+ */
+function bands(document: string): string[] {
+  return [...document.matchAll(/class="il-exercise ([^"]*)"/gu)].map((match) => match[1] ?? '');
+}
 
 /** Keeps the golden snapshots about layout rather than about base64. */
 function redactBlobs(document: string): string {
@@ -153,10 +168,9 @@ describe('buildDocument', () => {
   });
 
   describe('the disclaimer', () => {
-    it('renders two bands by default, top and bottom', async () => {
+    it('renders one band at the top by default', async () => {
       const document = await buildDocument(FIXED);
-      // The class names also appear in the stylesheet, so this counts the markup only.
-      expect([...document.matchAll(/class="il-exercise il-exercise--/gu)]).toHaveLength(2);
+      expect(bands(document)).toEqual(['il-exercise--bold il-exercise--top']);
       expect(document).toContain('[EXERCISE, EXERCISE, EXERCISE]');
     });
 
@@ -166,13 +180,44 @@ describe('buildDocument', () => {
       expect(document).not.toContain('[EXERCISE, EXERCISE, EXERCISE]');
     });
 
-    it('omits both bands when turned off, and changes nothing else', async () => {
+    it('omits the band when turned off, and changes nothing else', async () => {
       const on = await buildDocument(FIXED);
       const off = await buildDocument(FIXED, { disclaimer: NO_DISCLAIMER });
 
       expect(off).not.toContain('class="il-exercise');
       expect(off.length).toBeLessThan(on.length);
       expect(off).toContain(FIXED.headline);
+    });
+
+    it('draws the loud style at both ends, which is the point of it', async () => {
+      const document = await buildDocument(FIXED, { disclaimerStyle: 'band' });
+      expect(bands(document)).toEqual([
+        'il-exercise--band il-exercise--top',
+        'il-exercise--band il-exercise--bottom',
+      ]);
+    });
+
+    it('draws the quiet style once, at the top', async () => {
+      const document = await buildDocument(FIXED, { disclaimerStyle: 'quiet' });
+      expect(bands(document)).toEqual(['il-exercise--quiet il-exercise--top']);
+    });
+
+    /**
+     * The styles differ in how they are drawn and in nothing else. A preset that quietly
+     * softened the wording as well would be a way of making an asset harder to identify as
+     * synthetic, which is the one thing the framing may not do.
+     */
+    it('says the same words in every style', async () => {
+      for (const style of DISCLAIMER_STYLES) {
+        const document = await buildDocument(FIXED, { disclaimerStyle: style });
+        expect(document).toContain(`>${DEFAULT_DISCLAIMER}</div>`);
+      }
+    });
+
+    /** Two of the three have no fill, so they inherit whatever the page is. */
+    it('reads the page palette for the quiet style, and never for the loud one', () => {
+      expect(DISCLAIMER_CSS).toMatch(/\.il-exercise--quiet \{[^}]*var\(--il-muted\)/u);
+      expect(DISCLAIMER_CSS).not.toMatch(/\.il-exercise--bold \{[^}]*var\(/u);
     });
   });
 

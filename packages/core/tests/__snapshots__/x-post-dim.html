@@ -42,18 +42,38 @@ body {
 }
 
 .il-exercise {
-  background: #ffd400;
-  color: #000;
   font-family: var(--il-font-ui);
   font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.il-exercise--bold {
+  color: #d81f2a;
+  font-size: 15px;
+  letter-spacing: 0.13em;
+  padding: 11px 8px;
+}
+
+.il-exercise--band {
+  background: #ffd400;
+  color: #000;
   font-size: 20px;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
-  text-align: center;
   padding: 14px 8px;
 }
-.il-exercise--top { border-bottom: 3px solid #b80000; }
-.il-exercise--bottom { border-top: 3px solid #b80000; }
+.il-exercise--band.il-exercise--top { border-bottom: 3px solid #b80000; }
+.il-exercise--band.il-exercise--bottom { border-top: 3px solid #b80000; }
+
+.il-exercise--quiet {
+  color: var(--il-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  padding: 8px;
+}
+.il-exercise--quiet.il-exercise--top { border-bottom: 1px solid var(--il-rule); }
+.il-exercise--quiet.il-exercise--bottom { border-top: 1px solid var(--il-rule); }
 
 .x-shell {
   font-family: var(--il-font-ui);
@@ -103,7 +123,7 @@ body {
         </style>
       </head>
       <body>
-        <div class="il-exercise il-exercise--top">[EXERCISE, EXERCISE, EXERCISE]</div> <div class="x-shell">
+        <div class="il-exercise il-exercise--bold il-exercise--top">[EXERCISE, EXERCISE, EXERCISE]</div> <div class="x-shell">
     <div class="x-post">
           <div class="x-rail">
             <div class="x-avatar" style="background: #8a4b1f">
@@ -138,6 +158,6 @@ body {
           </div>
         </div>
         
-  </div> <div class="il-exercise il-exercise--bottom">[EXERCISE, EXERCISE, EXERCISE]</div>
+  </div> 
       </body>
     </html> 

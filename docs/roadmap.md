@@ -59,6 +59,18 @@ touched. The question moves to the fourth outlet, which should be a second daily
   its release time, rendering the full asset set plus a chronogram in one command. This is the
   feature that turns an asset generator into an exercise builder, and it is the most likely
   thing to be built next.
+- **A custom disclaimer style.** `--disclaimer-style` ships three presets, and the fourth
+  option a designer asks for is their own: an organisation's exercise colours, a house font, a
+  band on the left edge. Deliberately deferred rather than dropped. The presets had to exist
+  first, because they are what a custom style would be measured against, and because shipping
+  the escape hatch before the defaults are right means nobody finds out the defaults are
+  wrong. Two questions to settle before it is built. Where the CSS lives: a flag holding a
+  file path keeps it out of the spec, and a spec field makes the framing travel with the
+  inject, which is either the point or the risk depending on who wrote the spec. And what it
+  may not do, which is the harder one, since arbitrary CSS on the band is by construction a
+  way to make the framing invisible while the tool still reports it as on. The likely answer
+  is a small named set of properties rather than a stylesheet, and that is a different feature
+  from the one people will ask for. See [`use-policy.md`](./use-policy.md).
 - PDF output, and a press-clipping page combining several assets.
 - Video: a scrolling article capture, a breaking-news ticker loop.
 - Handing rendered assets straight to email drafts, or writing one `.eml` per inject.

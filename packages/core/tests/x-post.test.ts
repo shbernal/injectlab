@@ -101,9 +101,20 @@ describe('composing a post', () => {
     expect([...document.matchAll(/class="x-metrics"/gu)]).toHaveLength(1);
   });
 
-  it('carries the same disclaimer bands as an article', async () => {
+  it('carries the same disclaimer band as an article, in the same style', async () => {
     const document = await buildDocument(POST);
-    expect([...document.matchAll(/class="il-exercise il-exercise--/gu)]).toHaveLength(2);
+    expect([...document.matchAll(/class="il-exercise il-exercise--/gu)]).toHaveLength(1);
+    expect(document).toContain('class="il-exercise il-exercise--bold il-exercise--top"');
+  });
+
+  /**
+   * The quiet style has no fill and borrows `--il-muted`, which the outlet themes define and
+   * the platform palettes also had to. A post on the dark theme is where that would break.
+   */
+  it('keeps the quiet band legible on a dark post, by reading the platform palette', async () => {
+    const document = await buildDocument({ ...POST, theme: 'dark' }, { disclaimerStyle: 'quiet' });
+    expect(document).toContain('il-exercise--quiet');
+    expect(document).toMatch(/--il-muted: #\w{6};/u);
   });
 
   it('makes no external reference', async () => {

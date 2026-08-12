@@ -145,15 +145,21 @@ own time. If the times matter, write the posts as separate injects in one file i
 These are command-line flags rather than spec fields, because they are about how an asset is
 produced rather than what it says.
 
-| Flag           | Default                          |                                                                                |
-| -------------- | -------------------------------- | ------------------------------------------------------------------------------ |
-| `--out`        | `out`                            | A file when there is one result and it has an extension, a directory otherwise |
-| `--format`     | `png`                            | `html` writes the composed document instead, and launches no browser           |
-| `--scale`      | `2`                              | Device pixel ratio                                                             |
-| `--variant`    | each kind's own                  | Overrides the viewport                                                         |
-| `--disclaimer` | `[EXERCISE, EXERCISE, EXERCISE]` | Any text, or `none` to omit the bands                                          |
-| `--chars`      | `error`                          | `warn` or `off`                                                                |
-| `--json`       | off                              | One object on stdout, diagnostics on stderr                                    |
+| Flag                 | Default                          |                                                                                |
+| -------------------- | -------------------------------- | ------------------------------------------------------------------------------ |
+| `--out`              | `out`                            | A file when there is one result and it has an extension, a directory otherwise |
+| `--format`           | `png`                            | `html` writes the composed document instead, and launches no browser           |
+| `--scale`            | `2`                              | Device pixel ratio                                                             |
+| `--variant`          | each kind's own                  | Overrides the viewport                                                         |
+| `--disclaimer`       | `[EXERCISE, EXERCISE, EXERCISE]` | Any text, or `none` to omit the bands                                          |
+| `--disclaimer-style` | `bold`                           | `bold`, `band` or `quiet`. How the banner is drawn, never what it says         |
+| `--chars`            | `error`                          | `warn` or `off`                                                                |
+| `--json`             | off                              | One object on stdout, diagnostics on stderr                                    |
+
+`--disclaimer-style bold` is red wording at the top with no fill, `band` is the yellow band at
+the top and the bottom, and `quiet` is small grey letters over a hairline. Only `band` draws
+twice, which matters if the asset will travel on its own; the reasoning is in
+[`use-policy.md`](./use-policy.md).
 
 `--disclaimer none` removes the visible bands. It does not remove the embedded PNG metadata
 marking the file as synthetic exercise material, which is not switchable. See

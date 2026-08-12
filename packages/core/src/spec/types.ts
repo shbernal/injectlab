@@ -1,4 +1,5 @@
 import type { OutletId } from '../outlets/registry.js';
+import type { DisclaimerStyle } from '../render/disclaimer.js';
 
 /**
  * What the exercise designer writes.
@@ -84,6 +85,8 @@ export type InjectVariant = 'desktop' | 'mobile' | 'card';
 export interface RenderOptions {
   /** Banner text, or 'none' to omit the band. Embedded PNG provenance is unaffected. */
   disclaimer: string;
+  /** Which preset draws it: red wording, the yellow band, or a hairline. */
+  disclaimerStyle: DisclaimerStyle;
   /** deviceScaleFactor. */
   scale: 1 | 2 | 3;
   /** What to do when user text contains a banned character. */
