@@ -12,7 +12,8 @@
     // The build resolves this through project references instead; this file has none, since
     // it deliberately reads sources rather than declaration output.
     "paths": {
-      "@injectlab/core": ["./packages/core/src/index.ts"]
+      "@injectlab/core": ["./packages/core/src/index.ts"],
+      "@injectlab/core/playwright": ["./packages/core/src/render/playwright.ts"]
     }
   },
   "include": ["packages/*/src/**/*.ts", "packages/*/tests/**/*.ts", "tools/**/*.ts", "*.config.ts"]

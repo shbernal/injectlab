@@ -1,41 +1,95 @@
 /**
  * Public surface of `@injectlab/cli`.
  *
- * `run` is exported separately from the binary so tests drive it with injected io and
- * assert on the exit code, rather than spawning a process for every case.
+ * `run` is exported separately from the binary so tests drive it in process with a fake
+ * renderer and captured output, and assert on the exit code. Spawning a process per case
+ * would be slower and would prove less.
  */
 
-import { DEFAULT_DISCLAIMER } from '@injectlab/core';
+import { EXIT_OK, EXIT_USAGE, UsageError, parseFlags } from './args.js';
+import * as commands from './commands.js';
+import type { CliContext, CliIo } from './context.js';
+import { COMMAND_HELP, MAIN } from './help.js';
 
-export const EXIT_OK = 0;
-export const EXIT_USAGE = 2;
+export { EXIT_CHARS, EXIT_OK, EXIT_RENDER, EXIT_SPEC, EXIT_USAGE } from './args.js';
+export type { CliContext, CliIo } from './context.js';
+export { defaultContext } from './context.js';
 
-/** Output sinks, injected so tests capture what the binary would print. */
-export interface CliIo {
-  out: (line: string) => void;
-  err: (line: string) => void;
+type Command = (
+  flags: ReturnType<typeof parseFlags>,
+  context: CliContext,
+) => number | Promise<number>;
+
+const COMMANDS: Record<string, Command> = {
+  demo: commands.demo,
+  news: commands.news,
+  render: commands.render,
+  outlets: commands.outlets,
+  init: commands.init,
+  doctor: commands.doctor,
+};
+
+/** Suggests the intended command when someone types a near miss. */
+function nearest(name: string): string | undefined {
+  const known = Object.keys(COMMANDS);
+  return known.find((candidate) => candidate.startsWith(name) || name.startsWith(candidate));
 }
 
-const USAGE = [
-  'inject, generator of crisis-exercise stimuli',
-  '',
-  'Usage:',
-  '  inject <command> [options]',
-  '',
-  'Commands:',
-  '  (none yet, the scaffold is in place and the commands land next)',
-  '',
-  `Every generated asset carries the ${DEFAULT_DISCLAIMER} banner unless it is turned off,`,
-  'and every PNG carries embedded provenance marking it as synthetic exercise material.',
-].join('\n');
+export async function run(argv: readonly string[], context: CliContext): Promise<number> {
+  const [name, ...rest] = argv;
 
-export function run(argv: readonly string[], io: CliIo): number {
-  if (argv.length === 0 || argv.includes('--help') || argv.includes('-h')) {
-    io.out(USAGE);
+  if (name === undefined || name === '--help' || name === '-h') {
+    context.io.out(MAIN);
     return EXIT_OK;
   }
 
-  io.err(`inject: unknown command ${JSON.stringify(argv[0] ?? '')}`);
-  io.err("Run 'inject --help' for usage.");
-  return EXIT_USAGE;
+  if (name === '--version') {
+    context.io.out(await version());
+    return EXIT_OK;
+  }
+
+  const command = COMMANDS[name];
+  if (command === undefined) {
+    context.io.err(`unknown command ${JSON.stringify(name)}`);
+    const suggestion = nearest(name);
+    if (suggestion !== undefined) context.io.err(`Did you mean 'inject ${suggestion}'?`);
+    context.io.err("Run 'inject --help' for the command list.");
+    return EXIT_USAGE;
+  }
+
+  try {
+    const flags = parseFlags(rest);
+
+    if (flags.help) {
+      context.io.out(COMMAND_HELP[name] ?? MAIN);
+      return EXIT_OK;
+    }
+
+    return await command(flags, context);
+  } catch (error) {
+    if (error instanceof UsageError) {
+      context.io.err(`inject ${name}: ${error.message}`);
+      if (error.hint !== undefined) context.io.err(error.hint);
+      return EXIT_USAGE;
+    }
+    throw error;
+  }
+}
+
+async function version(): Promise<string> {
+  const { readFile } = await import('node:fs/promises');
+  const manifest: unknown = JSON.parse(
+    await readFile(new URL('../package.json', import.meta.url), 'utf8'),
+  );
+  return typeof manifest === 'object' && manifest !== null && 'version' in manifest
+    ? String(manifest.version)
+    : '0.0.0';
+}
+
+/** Convenience for embedders: the default context wired to real stdio. */
+export function stdio(): CliIo {
+  return {
+    out: (line) => process.stdout.write(`${line}\n`),
+    err: (line) => process.stderr.write(`${line}\n`),
+  };
 }
