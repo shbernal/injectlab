@@ -36,6 +36,16 @@ export type {
 export { getOutlet, isOutletId, listOutletIds, listOutlets } from './outlets/registry.js';
 export type { OutletId } from './outlets/registry.js';
 
+export {
+  FONT_ASSET_DIR,
+  getTypeface,
+  isTypefaceId,
+  listTypefaces,
+  typefaceFileUrl,
+  typefaceLicenceUrl,
+} from './fonts/catalogue.js';
+export type { Typeface, TypefaceId } from './fonts/catalogue.js';
+
 export { CharPolicyError, formatCharFindings, gate, scanInject, userText } from './text/chars.js';
 export type { CharFinding, GateResult } from './text/chars.js';
 

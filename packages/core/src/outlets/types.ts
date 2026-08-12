@@ -5,7 +5,21 @@
  * task, which means every visual difference between two outlets in the same layout family has
  * to be expressible here. If a new outlet needs a code change, either the theme is missing a
  * field or the outlet genuinely belongs to a new layout family.
+ *
+ * Read this before authoring one, because it is the moment the rule matters:
+ *
+ * **Fonts and marks are stand-ins, never the real assets.** Outlets set their pages in
+ * licensed typefaces and head them with trademarked logos. Neither may enter this
+ * repository. A theme names an open-licensed face from the bundled catalogue, chosen for
+ * visual proximity, and a masthead is either a wordmark set in that face or a simplified
+ * redraw. Every outlet states what it approximates in `fidelity`, and that field is asserted
+ * to be non-trivial by the registry test.
+ *
+ * Improving fidelity by fetching the real logo or the real font is not an improvement. It is
+ * the one change this file exists to prevent.
  */
+
+import type { TypefaceId } from '../fonts/catalogue.js';
 
 /**
  * A layout function, shared by every outlet that uses it. Outlets in the same family differ
@@ -16,18 +30,20 @@
  */
 export type LayoutFamily = 'uk-online-broadsheet' | 'fr-online-daily';
 
+export type { TypefaceId };
+
 /**
- * A typeface as the theme refers to it. The actual files live in the bundled font catalogue
- * and are resolved, embedded and cached at render time.
+ * A typeface as the theme refers to it. The files live in the bundled catalogue and are
+ * resolved, embedded and cached at render time.
  */
 export interface FontSpec {
   /** Family name declared in the composed CSS. */
   family: string;
-  /** Catalogue id of the bundled, open-licensed typeface backing it. */
-  face: string;
+  /** Which bundled, open-licensed typeface backs it. */
+  face: TypefaceId;
   /** Generic stack appended after the embedded family, in case embedding is ever skipped. */
   fallback: string;
-  /** Weights the layout is allowed to ask for. */
+  /** Weights the layout is allowed to ask for. Must fall inside the face's variable range. */
   weights: readonly number[];
 }
 
