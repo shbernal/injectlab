@@ -58,6 +58,33 @@ Two failure modes worth recognising:
 - **A section front rather than an article.** The headline role matches a navigation heading.
   Check that the captured `headline.text` is the story's headline.
 
+### When the site refuses to be visited
+
+Some outlets answer an automated visit with a bot challenge, and you get a "Client Challenge"
+page with no headline at all. Le Monde does. Do not guess the numbers from the section front:
+that is how this project ended up with a Le Monde headline size and column width that were
+both wrong by a wide margin. Save the article from a browser instead, then measure the file:
+
+```bash
+node tools/capture-reference.mjs <the article url> --id example --from-saved saved-page.html
+```
+
+The saved markup is served as the document at the URL you pass, so the stylesheets and fonts
+still resolve against the real origin and the measurements are as real as a live capture.
+Scripts are blocked, since running the page's own code only re-enters the challenge. A
+Firefox "view source" save works and is unwrapped automatically, which matters because it is
+often the only way to get the markup out of a page that will not be automated. `notes.json`
+records which of the two paths produced it, under `source`.
+
+Two things to watch when you measure a saved article:
+
+- **Check the article is a plain news story.** Opinion, analysis and review templates carry
+  modifier classes that change the headline weight, leading and column. Le Monde's `--opinion`
+  variant is 800 over a 1.26 line in a 680px float where the news article is 500 over 1.11 at
+  full width. Strip the modifiers in the page and re-measure if that is all you have.
+- **Check whether you were signed in.** A subscriber layout can be wider. Le Monde's article
+  column is 556px logged out and 664px logged in.
+
 ## 2. Decide the layout family
 
 `LayoutFamily` in `packages/core/src/outlets/types.ts` is a closed union, and each value is

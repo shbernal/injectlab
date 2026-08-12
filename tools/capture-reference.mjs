@@ -12,13 +12,23 @@
  * Usage:
  *   node tools/capture-reference.mjs <url> --id bbc
  *   node tools/capture-reference.mjs <url> --id bbc --keep-open
+ *   node tools/capture-reference.mjs <url> --id bbc --from-saved page.html
  *
  * The measurements come from `getComputedStyle` in a real engine rather than from parsing
  * CSS, which resolves the cascade, the custom properties and the responsive rules for free.
+ *
+ * `--from-saved` measures a page a human already has, for the outlets that answer an
+ * automated visit with a bot challenge instead of an article. The saved markup is served as
+ * the document at the real URL, so the stylesheets and fonts still resolve against the real
+ * origin and the numbers are as real as a live capture. Scripts are blocked in this mode:
+ * the saved markup is what the server sent, and running the page's own code would only
+ * re-enter the challenge that made the file necessary. A Firefox "view source" save is
+ * unwrapped automatically, since that is the one way to get the markup out of a page that
+ * refuses to be automated.
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 
 import { chromium } from 'playwright';
@@ -28,12 +38,19 @@ const { values, positionals } = parseArgs({
   options: {
     id: { type: 'string' },
     'keep-open': { type: 'boolean', default: false },
+    'from-saved': { type: 'string' },
   },
 });
 
 const url = positionals[0];
 if (!url || !values.id) {
   console.error('Usage: node tools/capture-reference.mjs <url> --id <outlet-id>');
+  console.error(
+    '       node tools/capture-reference.mjs <url> --id <outlet-id> --from-saved <file>',
+  );
+  console.error('');
+  console.error('The URL is required with --from-saved too: it is what the saved markup is');
+  console.error('served as, so the stylesheets it names resolve, and it is the provenance.');
   process.exit(2);
 }
 
@@ -54,12 +71,20 @@ const ROLES = {
   standfirst: [
     '[class*="standfirst" i]',
     '[class*="chapeau" i]',
+    // Before the descendant form below, which otherwise matches the paragraph inside an
+    // author "description" block and reports a reporter's name as the standfirst.
+    'p[class*="desc" i]',
     '[class*="description" i] p',
     'article h2',
     'main h2',
   ],
   byline: ['[class*="byline" i]', '[rel="author"]', '[class*="author" i]'],
-  section: ['[class*="section" i] a', 'nav [aria-current]', '[class*="kicker" i]'],
+  section: [
+    '[class*="section" i] a',
+    'a[class*="section" i]',
+    'nav [aria-current]',
+    '[class*="kicker" i]',
+  ],
   timestamp: ['time', '[class*="timestamp" i]', '[class*="date" i]'],
 };
 
@@ -157,14 +182,65 @@ function measureRoles(roles) {
   return result;
 }
 
+/**
+ * The markup to serve as the document, or null for a live capture.
+ *
+ * A Firefox "view source" save is a syntax-highlighted rendering of the source, so the source
+ * itself is the body's text. Unwrapping it through a real DOM rather than a regex keeps the
+ * entity decoding exact, which matters for a French page where every other headline carries
+ * an accent and a non-breaking space.
+ */
+async function readSavedDocument(file, browser) {
+  const bytes = await readFile(file, 'utf8');
+  if (!/<body[^>]*\bid="viewsource"/u.test(bytes)) return bytes;
+
+  const page = await browser.newPage();
+  await page.goto(pathToFileURL(file).href, { waitUntil: 'load', timeout: 120_000 });
+  const source = await page.evaluate(() => document.body.textContent ?? '');
+  await page.close();
+  console.log(`unwrapped a view-source save: ${source.length} bytes of markup`);
+  return source;
+}
+
 await mkdir(OUT, { recursive: true });
 
 const browser = await chromium.launch({ headless: !values['keep-open'] });
-const notes = { url, capturedAt: new Date().toISOString(), viewports: {} };
+
+const savedFile = values['from-saved'];
+const savedHtml = savedFile ? await readSavedDocument(savedFile, browser) : null;
+
+const notes = {
+  url,
+  capturedAt: new Date().toISOString(),
+  // Provenance, because a reader of notes.json has to know whether a live visit produced
+  // these numbers or a file a human saved by hand, and what was not running when they did.
+  source:
+    savedHtml === null
+      ? { kind: 'live' }
+      : { kind: 'saved-file', file: savedFile, scripts: 'blocked' },
+  viewports: {},
+};
 
 for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   const context = await browser.newContext({ viewport, locale: 'en-GB' });
   const page = await context.newPage();
+
+  if (savedHtml !== null) {
+    await page.route('**/*', (route) => {
+      const request = route.request();
+      if (request.resourceType() === 'script') return route.abort();
+      // Only the document itself is served from the file. Stylesheets, fonts and images
+      // still come from the real origin, which is what makes the measurements real.
+      if (request.url() === url) {
+        return route.fulfill({
+          status: 200,
+          contentType: 'text/html; charset=utf-8',
+          body: savedHtml,
+        });
+      }
+      return route.continue();
+    });
+  }
 
   await page.goto(url, { waitUntil: 'networkidle', timeout: 60_000 });
   // Consent dialogs cover the page and would be measured instead of the article.
