@@ -40,25 +40,79 @@ stops before the browser starts and reports the field, the column and a suggeste
 makes no network request of any kind, and a path that resolves differently on someone else's
 machine is not an asset. A path that does not resolve is an error, not a broken image.
 
+`masthead.url` is the single exception, and it is not one of these paths: it is fetched by the
+CLI before composing, needs `--allow-remote`, and is embedded as a `data:` URI like everything
+else. The render itself still makes no request. See below.
+
 ## `kind: news`
 
-| Field           | Required | Default                       | Notes                                                                       |
-| --------------- | -------- | ----------------------------- | --------------------------------------------------------------------------- |
-| `outlet`        | yes      |                               | An id from `inject outlets`                                                 |
-| `headline`      | yes      |                               |                                                                             |
-| `publishedAt`   | yes      |                               | ISO 8601 with an offset                                                     |
-| `standfirst`    | no       | none                          | The deck or chapeau under the headline                                      |
-| `byline`        | no       | none                          | The name alone. The outlet decides whether it becomes `By ...` or `Par ...` |
-| `section`       | no       | the outlet's own default      |                                                                             |
-| `body`          | no       | none                          | A list of lead paragraphs                                                   |
-| `url`           | no       | synthesised from the headline | Shown where a layout has an address bar. Never fetched                      |
-| `image.path`    | no       | none                          | Local file, embedded into the page                                          |
-| `image.caption` | no       | none                          |                                                                             |
-| `image.credit`  | no       | none                          |                                                                             |
-| `variant`       | no       | `desktop`                     | `desktop`, `mobile` or `card`                                               |
+| Field             | Required | Default                       | Notes                                                                       |
+| ----------------- | -------- | ----------------------------- | --------------------------------------------------------------------------- |
+| `outlet`          | yes      |                               | An id from `inject outlets`                                                 |
+| `headline`        | yes      |                               |                                                                             |
+| `publishedAt`     | yes      |                               | ISO 8601 with an offset                                                     |
+| `standfirst`      | no       | none                          | The deck or chapeau under the headline                                      |
+| `byline`          | no       | none                          | The name alone. The outlet decides whether it becomes `By ...` or `Par ...` |
+| `section`         | no       | the outlet's own default      |                                                                             |
+| `body`            | no       | none                          | A list of lead paragraphs                                                   |
+| `url`             | no       | synthesised from the headline | Shown where a layout has an address bar. Never fetched                      |
+| `image.path`      | no       | none                          | Local file, embedded into the page                                          |
+| `image.caption`   | no       | none                          |                                                                             |
+| `image.credit`    | no       | none                          |                                                                             |
+| `masthead.path`   | no       | the outlet's own masthead     | Local mark, embedded. See below                                             |
+| `masthead.url`    | no       | the outlet's own masthead     | Remote mark. Needs `--allow-remote`                                         |
+| `masthead.height` | no       | the layout's wordmark height  | CSS pixels                                                                  |
+| `variant`         | no       | `desktop`                     | `desktop`, `mobile` or `card`                                               |
 
 `variant` selects a viewport, not a pixel size. `card` is the 1200 by 630 social preview shape
 and is the only one with a fixed height; the others capture the full page.
+
+### Supplying your own masthead
+
+Every bundled outlet ships an approximation of its masthead, because the real ones are
+trademarks and are not in this repository. `masthead` replaces that approximation with a mark
+you supply, for the case the tool actually has: an exercise on your own organisation's
+newsroom, or a fictional outlet somebody drew for you.
+
+```yaml
+kind: news
+outlet: bbc
+headline: Northwind Logistics halts deliveries after an attack on its depots
+publishedAt: 2026-08-12T09:14:00+01:00
+masthead:
+  path: ./brand/newsroom-mark.svg
+  height: 40
+```
+
+Exactly one of `path` and `url`. PNG, JPEG, WebP, AVIF, GIF and SVG are accepted, and SVG is
+usually what you want. The file is embedded as a `data:` URI, so the composed document stays
+self-contained.
+
+**This is not a fidelity feature for real publications.** Pointing it at a logo you downloaded
+does not make that logo yours, and the answer to "can it look more like the real thing" is
+still the one in `docs/use-policy.md`. What ships in the box is unchanged: every bundled outlet
+still approximates, and the disclaimer bands and PNG provenance are untouched either way.
+
+**`url` costs you two things, both deliberate.**
+
+The person running the render must pass `--allow-remote`. A spec file is something people pass
+around, and rendering one should not quietly fetch from a host its author chose. Without the
+flag a spec naming a URL fails with exit code 2 and nothing is fetched.
+
+```
+$ inject render leak.yaml
+a spec names a remote masthead: https://assets.example.com/mark.svg
+Rendering it would fetch from that host, which is off by default.
+Pass --allow-remote to permit it, or use a local masthead.path instead.
+```
+
+And it gives up determinism. "The same spec at the same version produces the same output" stops
+holding, because the bytes at the far end can change or disappear. Prefer `path` when you can.
+
+The fetch happens once per URL, in the CLI, before the browser starts. The bytes are not
+verified beyond `http`/`https` only, a 10 second timeout, a 2 MB cap and a `Content-Type` that
+has to be an image. What you point it at is your risk. The mark renders as
+`<img src="data:...">`, so even an SVG cannot run script or pull anything further.
 
 ## `kind: x-post`
 

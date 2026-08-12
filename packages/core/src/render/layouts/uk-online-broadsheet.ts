@@ -34,6 +34,8 @@ export const UK_ONLINE_BROADSHEET_CSS = `
   padding: 4px 12px;
 }
 .uk-mark { display: flex; align-items: center; }
+/* A supplied mark sits at the wordmark's optical height unless the spec says otherwise. */
+.uk-supplied { display: block; height: 34px; width: auto; }
 .uk-nav {
   font-family: var(--il-font-ui);
   font-size: 14px;
@@ -129,9 +131,17 @@ const ASIDE_ITEMS = [
 ];
 
 function masthead(view: ArticleView): Html {
-  return view.masthead.kind === 'wordmark'
-    ? html`<div class="uk-wordmark">${view.masthead.source}</div>`
-    : html`<div class="uk-mark">${raw(view.masthead.source)}</div>`;
+  const mark = view.masthead;
+  if (mark.kind === 'wordmark') return html`<div class="uk-wordmark">${mark.source}</div>`;
+  if (mark.kind === 'svg') return html`<div class="uk-mark">${raw(mark.source)}</div>`;
+
+  // `Number` rather than the value straight through: this lands in a style attribute, and the
+  // schema is not the only way to reach here. An empty string leaves the stylesheet's height.
+  const style = mark.height === undefined ? '' : `height:${Number(mark.height)}px`;
+
+  return html`<div class="uk-mark">
+    <img class="uk-supplied" src="${mark.src}" alt="${mark.alt}" style="${style}" />
+  </div>`;
 }
 
 export function ukOnlineBroadsheet(view: ArticleView): Html {

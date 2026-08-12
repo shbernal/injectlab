@@ -15,6 +15,8 @@ Render flags (shared by demo, news and render):
   --disclaimer <text|none>  banner text. Default: [EXERCISE, EXERCISE, EXERCISE]
                             'none' omits the bands. Embedded PNG provenance is not affected.
   --chars error|warn|off    what to do about banned characters. Default: error
+  --allow-remote            permit fetching a masthead a spec names by URL. Off by default,
+                            so rendering someone else's spec does not reach a host they chose.
   --json                    machine-readable result on stdout
   --quiet                   suppress progress output
 `.trim();

@@ -11,6 +11,7 @@
 export type {
   CharPolicy,
   InjectImage,
+  InjectMasthead,
   InjectSpec,
   InjectVariant,
   NewsInject,
@@ -27,6 +28,7 @@ export type { ParseResult, SpecError, SpecFormat } from './spec/parse.js';
 export {
   BatchSchema,
   InjectSpecSchema,
+  MastheadSchema,
   NewsInjectSchema,
   XPostInjectSchema,
 } from './spec/schema.js';
@@ -80,9 +82,23 @@ export {
 export type { Provenance } from './render/provenance.js';
 export { renderAll, renderInject, sourceOf, targetFor } from './render/render.js';
 export type { BatchResult, RenderInjectOptions, RenderResult } from './render/render.js';
-export { buildView } from './render/view.js';
-export type { ArticleView, ViewContext } from './render/view.js';
-export { ImageError, embedImage } from './render/image.js';
+export { UnresolvedMastheadError, buildView } from './render/view.js';
+export type { ArticleView, MastheadView, ViewContext } from './render/view.js';
+export { IMAGE_TYPES, ImageError, embedImage } from './render/image.js';
+
+/**
+ * The only network path in the package, and it is off the render path by construction. A
+ * caller fetches with these, then passes the result to `buildDocument` as `mastheadSrc`.
+ * `buildDocument` itself still makes no request.
+ */
+export {
+  RemoteAssetError,
+  RemoteNotPermittedError,
+  fetchRemoteImage,
+  prefetchRemoteAssets,
+  remoteUrlsIn,
+} from './render/remote.js';
+export type { PrefetchOptions } from './render/remote.js';
 export { X_PLATFORM, xTheme, xThemes } from './render/platforms/x.js';
 export type { PlatformTheme } from './render/platforms/x.js';
 export { avatarColor, formatMetric, initials } from './render/layouts/x-post.js';

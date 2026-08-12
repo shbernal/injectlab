@@ -52,6 +52,14 @@ exists to prevent.
 pages are read only by `tools/capture-reference.mjs`, which is dev-only, imported by nothing,
 and writes to the git-ignored `.references/`.
 
+`render/remote.ts` is the one module that fetches, and it is off the compose path by
+construction: nothing reachable from `buildDocument` imports it, and a test in
+`tests/masthead.test.ts` walks the import graph to keep it that way. The CLI resolves
+`masthead.url` to a `data:` URI first, then composes. A `fetch` reachable from `buildDocument`
+would break the self-contained document, the offline test suite and determinism in one go.
+This is why the composer throws its own `UnresolvedMastheadError` rather than importing the
+error type from `remote.ts`.
+
 **The disclaimer is on by default and the embedded PNG provenance is unconditional.**
 `--disclaimer none` removes the visible bands and does not touch the metadata. Do not add a
 way to remove it. See `docs/use-policy.md` for what else will not be built.

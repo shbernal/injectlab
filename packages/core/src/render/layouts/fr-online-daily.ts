@@ -25,6 +25,8 @@ export const FR_ONLINE_DAILY_CSS = `
   letter-spacing: 0.02em;
   color: var(--il-text);
 }
+/* Centred like the wordmark it replaces, at roughly its cap height. */
+.fr-supplied { display: block; margin: 0 auto; height: 46px; width: auto; }
 .fr-nav {
   font-family: var(--il-font-ui);
   font-size: 13px;
@@ -99,9 +101,14 @@ export const FR_ONLINE_DAILY_CSS = `
 `.trim();
 
 function masthead(view: ArticleView): Html {
-  return view.masthead.kind === 'wordmark'
-    ? html`<div class="fr-wordmark">${view.masthead.source}</div>`
-    : raw(view.masthead.source);
+  const mark = view.masthead;
+  if (mark.kind === 'wordmark') return html`<div class="fr-wordmark">${mark.source}</div>`;
+  if (mark.kind === 'svg') return raw(mark.source);
+
+  // See the note in the UK family: `Number` because this reaches a style attribute.
+  const style = mark.height === undefined ? '' : `height:${Number(mark.height)}px`;
+
+  return html`<img class="fr-supplied" src="${mark.src}" alt="${mark.alt}" style="${style}" />`;
 }
 
 export function frOnlineDaily(view: ArticleView): Html {

@@ -44,6 +44,7 @@ const OPTIONS = {
   scale: { type: 'string' },
   disclaimer: { type: 'string' },
   chars: { type: 'string' },
+  'allow-remote': { type: 'boolean', default: false },
   json: { type: 'boolean', default: false },
   quiet: { type: 'boolean', default: false },
   verbose: { type: 'boolean', default: false },
@@ -66,6 +67,11 @@ export interface RenderFlags {
   scale: 1 | 2 | 3;
   disclaimer: string;
   chars: CharPolicy;
+  /**
+   * Permits fetching a masthead a spec named by URL. Off by default: a spec file is something
+   * people pass around, and rendering one should not silently reach a host its author chose.
+   */
+  allowRemote: boolean;
   json: boolean;
   quiet: boolean;
   verbose: boolean;
@@ -127,6 +133,7 @@ export function parseFlags(argv: readonly string[]): RenderFlags {
     scale: Number(scale) as 1 | 2 | 3,
     disclaimer: values.disclaimer ?? '',
     chars: oneOf('chars', values.chars, ['error', 'warn', 'off'], 'error'),
+    allowRemote: values['allow-remote'],
     json: values.json,
     quiet: values.quiet,
     verbose: values.verbose,

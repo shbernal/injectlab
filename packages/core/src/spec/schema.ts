@@ -42,6 +42,30 @@ export const ImageSchema = v.object({
   credit: v.exactOptional(v.string()),
 });
 
+/**
+ * Exactly one of `path` and `url`, checked on the object rather than expressed as a union.
+ *
+ * `v.union` would report the failure at the union and discard the field path, which is the
+ * whole value of this layer, and there is no discriminator here for `v.variant` to dispatch
+ * on. A `check` on the object keeps `masthead` in the path and lets the message name both
+ * keys, which is what someone who wrote neither actually needs to read.
+ */
+export const MastheadSchema = v.pipe(
+  v.object({
+    path: v.exactOptional(nonEmpty('masthead.path')),
+    url: v.exactOptional(nonEmpty('masthead.url')),
+    height: v.exactOptional(v.pipe(v.number(), v.minValue(1))),
+  }),
+  v.check(
+    (value) => (value.path === undefined) !== (value.url === undefined),
+    'masthead needs exactly one of path or url',
+  ),
+  v.check(
+    (value) => value.url === undefined || /^https?:\/\//u.test(value.url),
+    'masthead.url must be http or https',
+  ),
+);
+
 export const NewsInjectSchema = v.object({
   kind: v.literal('news'),
   outlet: outletId,
@@ -53,6 +77,7 @@ export const NewsInjectSchema = v.object({
   body: v.exactOptional(v.array(v.string())),
   url: v.exactOptional(v.string()),
   image: v.exactOptional(ImageSchema),
+  masthead: v.exactOptional(MastheadSchema),
   variant: v.exactOptional(v.picklist(['desktop', 'mobile', 'card'])),
 });
 

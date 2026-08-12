@@ -10,13 +10,17 @@ import path from 'node:path';
  * in front of the exercise cell.
  */
 
-const IMAGE_TYPES: Record<string, string> = {
+export const IMAGE_TYPES: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.avif': 'image/avif',
   '.gif': 'image/gif',
+  // Here for supplied mastheads, which are usually vector, and harmless everywhere else. An
+  // SVG behind `<img src="data:...">` cannot run script or pull a further resource, so this
+  // adds a format without adding a way for a document to reach the network.
+  '.svg': 'image/svg+xml',
 };
 
 export class ImageError extends Error {

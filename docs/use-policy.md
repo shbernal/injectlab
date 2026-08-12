@@ -42,6 +42,12 @@ any form. What ships is a set of open-licensed typefaces chosen for visual proxi
 mastheads either set in those faces or redrawn as simplified SVG. The verification badge on a
 post is a circle with a check, not the platform's own scalloped mark.
 
+A spec may supply its own masthead, with `masthead.path` or `masthead.url`. That is for a mark
+the exercise designer holds the rights to: their own organisation's newsroom, or a fictional
+outlet somebody drew for them. It changes nothing about what ships, and it is not a way to make
+a bundled outlet more convincing. Pointing it at a downloaded logo does not make that logo
+yours, and this page is still the answer to whether that is a good idea.
+
 Every outlet carries a `fidelity` note saying what it approximates, in plain words. Read them
 with `inject outlets --verbose`. They are written while the theme is authored rather than
 afterwards, so they record each compromise at the moment it was made.
@@ -49,6 +55,13 @@ afterwards, so they record each compromise at the moment it was made.
 **Nothing is fetched at render time.** No network request of any kind. Live pages are read
 only by a dev-only capture tool, only to inform a person or an agent authoring a theme, and
 what it captures is never redistributed.
+
+One thing can now reach the network, and it is deliberately not at render time.
+`masthead.url` is fetched by the CLI before composing and embedded as a `data:` URI, so the
+composed document is still self-contained and the browser still issues no request. It requires
+`--allow-remote` from whoever runs the render, not from whoever wrote the spec, because those
+are often different people. A URL also gives up the determinism guarantee, which is stated
+plainly in `docs/spec-format.md` rather than buried.
 
 ## What will not be built
 

@@ -29,6 +29,8 @@ export interface NewsInject {
   /** Shown in the address bar where the layout has one. Synthesised from the outlet if absent. */
   url?: string;
   image?: InjectImage;
+  /** Replaces the outlet's approximated masthead with a mark you supply. See `InjectMasthead`. */
+  masthead?: InjectMasthead;
   variant?: InjectVariant;
 }
 
@@ -41,6 +43,35 @@ export interface InjectImage {
   path: string;
   caption?: string;
   credit?: string;
+}
+
+/**
+ * A masthead supplied by the exercise designer, in place of the outlet's approximation.
+ *
+ * This exists for the mark you have the right to use: your own organisation's newsroom, or a
+ * fictional outlet somebody drew for you. It is not a fidelity feature for real publications,
+ * and pointing it at a downloaded logo does not make that logo yours. What the repository
+ * ships is unchanged either way: every bundled outlet still approximates, and
+ * `docs/use-policy.md` still describes what is in the box.
+ *
+ * Exactly one of `path` and `url` is required.
+ */
+export interface InjectMasthead {
+  /** A local file, resolved relative to the spec file, like `InjectImage.path`. */
+  path?: string;
+  /**
+   * A remote asset, fetched once at the CLI boundary and embedded as a `data:` URI before the
+   * document is composed. Rendering itself still makes no request.
+   *
+   * Two costs come with this, both accepted deliberately. The person running the render must
+   * pass `--allow-remote`, because a spec file is something people share and rendering one
+   * should not silently fetch from a host its author chose. And a URL gives up determinism:
+   * the bytes at the other end can change or disappear, so the same spec at the same version
+   * stops guaranteeing the same output. Prefer `path` when you can.
+   */
+  url?: string;
+  /** Rendered height in CSS pixels. Defaults to whatever the layout uses for its wordmark. */
+  height?: number;
 }
 
 /**
