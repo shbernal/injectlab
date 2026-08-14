@@ -47,6 +47,7 @@ function frenchFixture(): Outlet {
     domain: 'example.fr',
     theme: { ...bbc.theme, masthead: { kind: 'wordmark', source: 'Le Quotidien' } },
     conventions: {
+      navSections: ['International', 'Politique', 'Economie'],
       dateFormat: 'fr-long',
       bylinePrefix: 'Par ',
       sectionDefault: 'Economie',

@@ -90,9 +90,14 @@ export const lemonde: Outlet = {
       headlineLeading: 1.11,
       measure: 556,
     },
+    // One column the whole way down, which is the French daily at its plainest: the headline
+    // runs to the same 556px as the body and starts at the same left edge.
+    hero: { measure: 556, align: 'left' },
     masthead: { kind: 'wordmark', source: 'Le Monde' },
   },
   conventions: {
+    // Pixels is the tech section, and it is Le Monde's own word for it.
+    navSections: ['International', 'Politique', 'Economie', 'Pixels'],
     dateFormat: 'fr-long',
     bylinePrefix: 'Par ',
     sectionDefault: 'International',

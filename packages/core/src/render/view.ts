@@ -25,6 +25,8 @@ export type MastheadView =
 export interface ArticleView {
   outletName: string;
   masthead: MastheadView;
+  /** The section row the layout draws across the top. Furniture, never the story's section. */
+  navSections: readonly string[];
   section: string;
   headline: string;
   standfirst: string;
@@ -127,6 +129,7 @@ export async function buildView(
   return {
     outletName: outlet.name,
     masthead: await resolveMasthead(inject.masthead, outlet, context),
+    navSections: outlet.conventions.navSections,
     section: inject.section ?? outlet.conventions.sectionDefault,
     headline: inject.headline,
     standfirst: inject.standfirst ?? '',

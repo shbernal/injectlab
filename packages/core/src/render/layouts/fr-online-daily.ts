@@ -4,12 +4,22 @@ import type { ArticleView } from '../view.js';
 
 /**
  * The French online daily: centred masthead over a rule, a kicker above a serif headline,
- * a chapeau, then a single centred column with the byline below the standfirst rather than
- * above the image, and a subscriber marker in the furniture.
+ * a chapeau, then the story column with the byline below the standfirst rather than above the
+ * image, and a subscriber marker in the furniture.
  *
  * Deliberately a different arrangement from the UK family rather than the same one in
  * different colours. Two families that differ only by theme values would prove nothing about
  * whether the theme model is doing any work.
+ *
+ * The page is three stacked bands rather than one column, because the second outlet in this
+ * family does not run one column. Le Monde sets its headline at the body measure and hard
+ * left; Les Echos centres a 1000px headline over a 636px column. Both are `theme.hero`, so
+ * the family holds. Where the two measures are equal the three bands land exactly where the
+ * single column did.
+ *
+ * The caption is the exception to the hero's alignment, which is why it sits in its own band
+ * rather than inside the centred one: both outlets set the caption left under a lead image
+ * however the headline above it is set.
  */
 
 export const FR_ONLINE_DAILY_CSS = `
@@ -38,10 +48,21 @@ export const FR_ONLINE_DAILY_CSS = `
   gap: 26px;
   padding: 12px 0 2px;
 }
+.fr-hero {
+  max-width: var(--il-hero-measure);
+  margin: 0 auto;
+  padding: 34px 28px 0;
+  text-align: var(--il-hero-align);
+}
+.fr-lead {
+  max-width: var(--il-hero-measure);
+  margin: 0 auto;
+  padding: 0 28px;
+}
 .fr-shell {
   max-width: var(--il-measure);
   margin: 0 auto;
-  padding: 34px 28px 64px;
+  padding: 0 28px 64px;
 }
 .fr-kicker {
   font-family: var(--il-font-ui);
@@ -59,8 +80,10 @@ export const FR_ONLINE_DAILY_CSS = `
   line-height: var(--il-headline-leading);
   margin-bottom: 18px;
 }
+/* The headline face, not the body one. Both French outlets set the chapeau with the headline
+   rather than with the story, and for Le Monde the two faces are the same file anyway. */
 .fr-chapeau {
-  font-family: var(--il-font-body);
+  font-family: var(--il-font-headline);
   font-size: 20px;
   line-height: 1.45;
   color: var(--il-muted);
@@ -115,26 +138,28 @@ export function frOnlineDaily(view: ArticleView): Html {
   return html`
     <header class="fr-masthead">
       ${masthead(view)}
-      <nav class="fr-nav">
-        <span>International</span><span>Politique</span><span>Economie</span><span>Pixels</span>
-      </nav>
+      <nav class="fr-nav">${view.navSections.map((section) => html`<span>${section}</span>`)}</nav>
     </header>
-    <div class="fr-shell">
-      <article>
+    <article>
+      <div class="fr-hero">
         <div class="fr-kicker">${view.section}</div>
         <h1 class="fr-headline">${view.headline}</h1>
         ${view.standfirst !== '' && html`<p class="fr-chapeau">${view.standfirst}</p>`}
-        ${
-          view.image !== undefined &&
-          html`
+      </div>
+      ${
+        view.image !== undefined &&
+        html`
+          <div class="fr-lead">
             <figure class="fr-figure">
               <img src="${view.image.src}" alt="" />
               <figcaption class="fr-caption">
                 ${view.image.caption}${view.image.credit !== '' && html` ${view.image.credit}`}
               </figcaption>
             </figure>
-          `
-        }
+          </div>
+        `
+      }
+      <div class="fr-shell">
         <div class="fr-byline">
           <div>
             ${view.byline !== '' && html`<strong>${view.byline}</strong>`}
@@ -143,7 +168,7 @@ export function frOnlineDaily(view: ArticleView): Html {
           <div class="fr-tag">Article réservé aux abonnés</div>
         </div>
         ${view.body.map((paragraph) => html`<p class="fr-body">${paragraph}</p>`)}
-      </article>
-    </div>
+      </div>
+    </article>
   `;
 }

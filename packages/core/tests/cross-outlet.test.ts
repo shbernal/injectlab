@@ -110,6 +110,14 @@ describe('the second outlet cost nothing in the first', () => {
       for (const outlet of listOutlets()) {
         expect(code, `${outlet.id} named in a layout`).not.toContain(outlet.name);
         expect(code).not.toContain(`'${outlet.id}'`);
+
+        // A section name is a brand too, and it is the one that got through: the French daily
+        // layout carried Le Monde's row, Pixels included, until Les Echos rendered through it.
+        for (const section of outlet.conventions.navSections) {
+          expect(code, `${outlet.id} section ${section} written into a layout`).not.toContain(
+            `>${section}<`,
+          );
+        }
       }
     }
   });

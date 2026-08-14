@@ -49,6 +49,8 @@ export function themeVariables(theme: OutletTheme): string {
     '--il-headline-weight': String(theme.scale.headlineWeight),
     '--il-headline-leading': String(theme.scale.headlineLeading),
     '--il-measure': `${theme.scale.measure}px`,
+    '--il-hero-measure': `${theme.hero.measure}px`,
+    '--il-hero-align': theme.hero.align,
   };
 
   const body = Object.entries(variables)

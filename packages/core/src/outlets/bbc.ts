@@ -57,9 +57,12 @@ export const bbc: Outlet = {
       headlineLeading: 1.16,
       measure: 721,
     },
+    // The headline sits in the body column rather than above it, so the hero is that column.
+    hero: { measure: 721, align: 'left' },
     masthead: { kind: 'wordmark', source: 'BBC NEWS' },
   },
   conventions: {
+    navSections: ['Home', 'News', 'Business', 'Technology'],
     dateFormat: 'uk-long',
     bylinePrefix: 'By ',
     sectionDefault: 'UK',

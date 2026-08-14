@@ -61,9 +61,11 @@ export const FR_ONLINE_FREESHEET_CSS = `
 }
 .fs-nav span:first-child { color: var(--il-accent); }
 /* Centred, where the band and the section bar above it run the full width. That is measured
-   too: on a real page the band starts at the edge and the story starts 128px in. */
+   too: on a real page the band starts at the edge and the story starts 128px in. The width is
+   the hero measure, since in this family the headline is what runs the shell's full width;
+   the 24px is this block's own padding, so the content lands on the measured number. */
 .fs-shell {
-  max-width: 1048px;
+  max-width: calc(var(--il-hero-measure) + 24px);
   margin: 0 auto;
   padding: 28px 12px 56px;
 }
@@ -181,13 +183,10 @@ export function frOnlineFreesheet(view: ArticleView): Html {
       ${masthead(view)}
       <span class="fs-pill">Direct</span>
     </header>
-    <nav class="fs-nav">
-      <span>Actualité</span><span>Société</span><span>Monde</span><span>Economie</span>
-      <span>High-Tech</span><span>Planète</span>
-    </nav>
+    <nav class="fs-nav">${view.navSections.map((section) => html`<span>${section}</span>`)}</nav>
     <div class="fs-shell">
       <div class="fs-crumbs">
-        <span class="fs-crumb">Accueil</span><span class="fs-crumb">Actualité</span>
+        <span class="fs-crumb">Accueil</span><span class="fs-crumb">${view.section}</span>
       </div>
       <h1 class="fs-headline">${view.headline}</h1>
       <p class="fs-chapeau">

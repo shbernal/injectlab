@@ -45,6 +45,28 @@ const DEMOS: Record<OutletId, NewsInject> = {
     ],
   },
   /**
+   * The same French incident again, two hours on and read off the share price rather than off
+   * the communiqué. A business daily is the case for keeping the demo set to one scenario:
+   * what changes between this and the Le Monde spec above is almost entirely which facts the
+   * outlet thinks are the story.
+   */
+  lesechos: {
+    kind: 'news',
+    outlet: 'lesechos',
+    section: 'Industrie',
+    headline:
+      "Cyberattaque chez Aurélia Énergie : le groupe chiffre l'arrêt à 12 millions d'euros par semaine",
+    standfirst:
+      "Le titre a cédé 4,2 % à l'ouverture. La direction vise une reprise partielle en fin de semaine et ne confirme aucune demande de rançon.",
+    byline: 'Étienne Roux',
+    publishedAt: '2026-08-12T12:10:00+02:00',
+    body: [
+      "Aurélia Énergie a chiffré mercredi matin le coût de l'arrêt de ses trois sites français à environ 12 millions d'euros par semaine de production perdue, un ordre de grandeur que la direction présente comme provisoire et hors coûts de remédiation.",
+      "Le titre a ouvert en baisse de 4,2 % avant de refluer à moins de 3 % en séance. Deux analystes ont maintenu leur objectif de cours, en jugeant que l'essentiel de la facture serait absorbé par la couverture cyber souscrite l'an dernier.",
+      "Interrogée sur l'existence d'une demande de rançon, la direction n'a ni confirmé ni démenti, en renvoyant à l'enquête en cours. Une reprise partielle est visée en fin de semaine sur le site le moins touché.",
+    ],
+  },
+  /**
    * The same French incident as the daily above, an hour later and in the other register.
    * Rendered side by side that is the useful demonstration: one event, two publications, and
    * the difference between them is the outlet record rather than the copy.

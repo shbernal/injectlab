@@ -148,9 +148,7 @@ export function ukOnlineBroadsheet(view: ArticleView): Html {
   return html`
     <header class="uk-masthead">
       ${masthead(view)}
-      <nav class="uk-nav">
-        <span>Home</span><span>News</span><span>Business</span><span>Technology</span>
-      </nav>
+      <nav class="uk-nav">${view.navSections.map((section) => html`<span>${section}</span>`)}</nav>
     </header>
     <div class="uk-shell">
       <article>

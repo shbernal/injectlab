@@ -81,9 +81,13 @@ export const twentyMinutes: Outlet = {
       // The body column, not the headline's, which runs the full 1024px content width.
       measure: 592,
     },
+    // The 1024px content width. It was a literal in the freesheet layout until the theme had
+    // somewhere to put it, which is the gap the whole `hero` field closed.
+    hero: { measure: 1024, align: 'left' },
     masthead: { kind: 'wordmark', source: '20 Minutes' },
   },
   conventions: {
+    navSections: ['Actualité', 'Société', 'Monde', 'Economie', 'High-Tech', 'Planète'],
     // 'Publié le 12/08/2026 à 17h32'. Numeric, where Le Monde writes the month out.
     dateFormat: 'fr-numeric',
     // No prefix. An article is signed '20 Minutes avec agence' or with a reporter's name, bare.

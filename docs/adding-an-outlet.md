@@ -5,8 +5,9 @@ wrong: either the theme is missing a field, or the outlet genuinely belongs to a
 family. Both are worth stopping to think about, and neither is fixed by special-casing one
 outlet inside a layout.
 
-Three outlets have been authored through this, and it has held. What it did not predict is
-that the third would need a new layout family; see step 2.
+Four outlets have been authored through this, and it has held. What it did not predict is
+that the third would need a new layout family, and the fourth two new theme fields. Both
+cases are in step 2, and telling them apart is the only hard judgement in this document.
 
 ## Before you start: what may not go in the repository
 
@@ -61,9 +62,10 @@ Two failure modes worth recognising:
 ### When the site refuses to be visited
 
 Some outlets answer an automated visit with a bot challenge, and you get a "Client Challenge"
-page with no headline at all. Le Monde does. Do not guess the numbers from the section front:
-that is how this project ended up with a Le Monde headline size and column width that were
-both wrong by a wide margin. Save the article from a browser instead, then measure the file:
+page with no headline at all. Le Monde does. Les Echos answers "Access Denied". Do not guess
+the numbers from the section front: that is how this project ended up with a Le Monde headline
+size and column width that were both wrong by a wide margin. Get the markup another way, then
+measure the file:
 
 ```bash
 node tools/capture-reference.mjs <the article url> --id example --from-saved saved-page.html
@@ -75,6 +77,14 @@ Scripts are blocked, since running the page's own code only re-enters the challe
 Firefox "view source" save works and is unwrapped automatically, which matters because it is
 often the only way to get the markup out of a page that will not be automated. `notes.json`
 records which of the two paths produced it, under `source`.
+
+The file does not have to come from a browser. What these sites refuse is the headless
+browser, not the request: Les Echos serves its full server-rendered article to a plain
+`fetch` and denies the same URL to Chromium, so writing the response to a file and passing it
+to `--from-saved` is the whole of it. Try that before asking a human to save a page. What is
+not on the table is dressing the browser up as something it is not; if a site refuses the
+request itself, it has refused, and the answer is a different outlet or a human with a
+browser.
 
 Two things to watch when you measure a saved article:
 
@@ -109,6 +119,20 @@ date instead of a written month, a byline with no prefix, white text on the acce
 near black: all theme or convention data, and two of them were fields the model was missing
 rather than reasons to write another layout.
 
+Les Echos is the worked example of the other answer, and it looked like a family at first. Its
+headline is centred in a 1000px block over a body column of 636px, where Le Monde runs one
+556px column hard left the whole way down, and a page is not a small thing to change. But ask
+the question the other way: what does a reader recognise Les Echos by? A centred wordmark over
+a rule, a rubric above a serif headline, a subscriber marker in the furniture, one story
+column. That is the French daily, and Le Monde is the same page with the two numbers set
+equal. So `theme.hero` gained a measure and an alignment, `fr-online-daily` grew from one
+column into three stacked bands that collapse back onto each other when the measures match,
+and the family absorbed the second outlet instead of splitting.
+
+The tell is that the difference had a number. A furniture arrangement that no value could
+express is a family; a value the theme did not happen to carry yet is a field, however large
+it looks on the page.
+
 ## 3. Fill in the record
 
 Write `packages/core/src/outlets/<id>.ts` from `notes.json`. Everything in `OutletTheme` maps
@@ -123,6 +147,8 @@ to something the capture measured:
 | `scale.headlineSize`     | the headline's `fontSize`                                                |
 | `scale.headlineLeading`  | its `lineHeight` divided by its `fontSize`                               |
 | `scale.measure`          | the narrowest ancestor with a real `maxWidth`, from `headline.ancestors` |
+| `hero.measure`           | the same, measured around the headline rather than the body              |
+| `hero.align`             | the headline's own `textAlign`                                           |
 | `conventions.dateFormat` | the rendered date string, reproduced                                     |
 
 Write the `fidelity` note as you go, not afterwards. Written afterwards it becomes a summary

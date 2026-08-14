@@ -1,6 +1,7 @@
 import { twentyMinutes } from './20minutes.js';
 import { bbc } from './bbc.js';
 import { lemonde } from './lemonde.js';
+import { lesechos } from './lesechos.js';
 import type { Outlet } from './types.js';
 
 /**
@@ -13,6 +14,7 @@ import type { Outlet } from './types.js';
 const OUTLETS = {
   bbc,
   lemonde,
+  lesechos,
   '20minutes': twentyMinutes,
 } as const satisfies Record<string, Outlet>;
 

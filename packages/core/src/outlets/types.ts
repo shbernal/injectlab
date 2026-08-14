@@ -74,6 +74,23 @@ export interface OutletTheme {
     /** Body column width in CSS pixels. */
     measure: number;
   };
+  /**
+   * The block above the story: kicker, headline, chapeau and lead image.
+   *
+   * Separate from `scale.measure` because the two are not the same number on every page, and
+   * assuming they were is what made this a field. A page that runs one column the whole way
+   * down sets `measure` twice and nothing changes. Les Echos sets a 1000px headline centred
+   * over a 636px body column, which is most of what its article page looks like, and 20
+   * Minutes runs a full-width headline over an inset column.
+   *
+   * `align` is the headline block's alignment, not the page's: the caption under the lead
+   * image stays left in both outlets that centre their headline.
+   */
+  hero: {
+    /** Width the headline block runs to, in CSS pixels. */
+    measure: number;
+    align: 'left' | 'center';
+  };
   masthead:
     | { kind: 'wordmark'; source: string }
     /** Inline SVG, redrawn and simplified. Never a real logo file. */
@@ -82,6 +99,15 @@ export interface OutletTheme {
 
 /** How this outlet writes the furniture around the story. */
 export interface OutletConventions {
+  /**
+   * The section row across the top, in the outlet's own words.
+   *
+   * Data because a section name is a brand: the French daily layout carried Le Monde's row,
+   * Pixels included, until a second outlet used that layout and put a competitor's tech
+   * section above a business daily's masthead. Nothing in it is read; it is what a reader
+   * takes in without reading, which is exactly why the wrong one is noticed.
+   */
+  navSections: readonly string[];
   dateFormat: DateFormat;
   /** 'By ', 'Par '. Empty string for outlets that print the name bare. */
   bylinePrefix: string;

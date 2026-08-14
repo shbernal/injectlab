@@ -23,6 +23,7 @@ const frenchDaily: Outlet = {
   layout: 'fr-online-daily',
   domain: 'example.fr',
   conventions: {
+    navSections: ['International', 'Politique', 'Economie'],
     dateFormat: 'fr-long',
     bylinePrefix: 'Par ',
     sectionDefault: 'Economie',
