@@ -93,12 +93,13 @@ anyone's machine.
 
 ## Outlets
 
-| Id          | Outlet     |                              |
-| ----------- | ---------- | ---------------------------- |
-| `bbc`       | BBC News   | UK online broadsheet         |
-| `lemonde`   | Le Monde   | French online daily          |
-| `lesechos`  | Les Echos  | French online business daily |
-| `20minutes` | 20 Minutes | French online freesheet      |
+| Id          | Outlet     |                                 |
+| ----------- | ---------- | ------------------------------- |
+| `bbc`       | BBC News   | UK online broadsheet            |
+| `lemonde`   | Le Monde   | French online daily             |
+| `lesechos`  | Les Echos  | French online business daily    |
+| `capital`   | Capital    | French online business magazine |
+| `20minutes` | 20 Minutes | French online freesheet         |
 
 Plus `kind: x-post` for posts and threads, which is a platform rather than a publication and
 so takes no `outlet`.

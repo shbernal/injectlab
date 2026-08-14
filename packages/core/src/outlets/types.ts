@@ -28,7 +28,11 @@ import type { TypefaceId } from '../fonts/catalogue.js';
  * Resist adding one family per outlet. That is the failure mode that makes the tenth outlet
  * as expensive as the first, and it is easy to reach one small concession at a time.
  */
-export type LayoutFamily = 'uk-online-broadsheet' | 'fr-online-daily' | 'fr-online-freesheet';
+export type LayoutFamily =
+  | 'uk-online-broadsheet'
+  | 'fr-online-daily'
+  | 'fr-online-freesheet'
+  | 'fr-online-magazine';
 
 export type { TypefaceId };
 

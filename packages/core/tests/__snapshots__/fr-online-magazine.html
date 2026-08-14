@@ -1,0 +1,299 @@
+<!doctype html>
+    <html lang="fr-FR">
+      <head>
+        <meta charset="utf-8" />
+        <title>Northwind Logistics hit by ransomware, deliveries halted across the UK</title>
+        <style>
+          @font-face {
+  font-family: 'Capital Condensed Stand-in';
+  src: url(data:font/woff2;base64,REDACTED) format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Capital Sans Stand-in';
+  src: url(data:font/woff2;base64,REDACTED) format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --il-font-headline: 'Capital Condensed Stand-in', "Arial Narrow", Arial, sans-serif;
+  --il-font-body: 'Capital Sans Stand-in', Arial, Helvetica, sans-serif;
+  --il-font-ui: 'Capital Condensed Stand-in', "Arial Narrow", Arial, sans-serif;
+  --il-text: #0c111d;
+  --il-muted: #667085;
+  --il-accent: #fdfd5d;
+  --il-on-accent: #0c111d;
+  --il-rule: #d0d5dd;
+  --il-bg: #ffffff;
+  --il-section: #667085;
+  --il-headline-size: 44px;
+  --il-headline-weight: 700;
+  --il-headline-leading: 1.2;
+  --il-measure: 628px;
+  --il-hero-measure: 816px;
+  --il-hero-align: left;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+img { max-width: 100%; display: block; }
+figure { margin: 0; }
+h1, h2, h3, p { margin: 0; }
+body {
+  background: var(--il-bg);
+  color: var(--il-text);
+  font-family: var(--il-font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.il-exercise {
+  font-family: var(--il-font-ui);
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.il-exercise--bold {
+  color: #d81f2a;
+  font-size: 15px;
+  letter-spacing: 0.13em;
+  padding: 11px 8px;
+}
+
+.il-exercise--band {
+  background: #ffd400;
+  color: #000;
+  font-size: 20px;
+  letter-spacing: 0.14em;
+  padding: 14px 8px;
+}
+.il-exercise--band.il-exercise--top { border-bottom: 3px solid #b80000; }
+.il-exercise--band.il-exercise--bottom { border-top: 3px solid #b80000; }
+
+.il-exercise--quiet {
+  color: var(--il-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  padding: 8px;
+}
+.il-exercise--quiet.il-exercise--top { border-bottom: 1px solid var(--il-rule); }
+.il-exercise--quiet.il-exercise--bottom { border-top: 1px solid var(--il-rule); }
+
+.mag-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 40px;
+}
+.mag-wordmark {
+  font-family: var(--il-font-headline);
+  font-weight: 700;
+  font-size: 38px;
+  letter-spacing: -0.01em;
+  color: var(--il-text);
+}
+/* Centred like the wordmark it replaces, at roughly its cap height. */
+.mag-supplied { display: block; height: 44px; width: auto; }
+/* Balances the subscribe button so the mark lands centred between them. Empty on purpose:
+   the real strip carries a newsstand card here, which is furniture this does not reproduce. */
+.mag-topbar-spacer { flex: 1; }
+.mag-topbar-mark { flex: 0 0 auto; }
+.mag-topbar-end { flex: 1; display: flex; justify-content: flex-end; }
+.mag-subscribe {
+  font-family: var(--il-font-ui);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--il-on-accent);
+  background: var(--il-accent);
+  padding: 9px 24px;
+}
+/* The band. Full bleed, and the reason this family exists. */
+.mag-navbar {
+  background: var(--il-text);
+  padding: 0 40px;
+}
+.mag-nav {
+  font-family: var(--il-font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--il-bg);
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  height: 48px;
+}
+/* 628 + 40 gap + 292 rail, all measured, which is the 960px content box the real page runs
+   its article in. Written from the body measure out so the rail keeps its width when an
+   outlet in this family sets a different column. */
+.mag-shell {
+  max-width: calc(var(--il-measure) + 332px);
+  margin: 0 auto;
+  padding: 26px 20px 64px;
+}
+.mag-head {
+  max-width: var(--il-hero-measure);
+  text-align: var(--il-hero-align);
+}
+.mag-crumbs {
+  font-family: var(--il-font-ui);
+  font-size: 14px;
+  color: var(--il-section);
+  margin-bottom: 16px;
+}
+.mag-headline {
+  font-family: var(--il-font-headline);
+  font-size: var(--il-headline-size);
+  font-weight: var(--il-headline-weight);
+  line-height: var(--il-headline-leading);
+  margin-bottom: 18px;
+}
+/* The body face and the text colour, not the headline face and not the muted grey. Both are
+   measured, and both are the opposite of what the daily family does with a chapeau. */
+.mag-chapeau {
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--il-text);
+  margin-bottom: 30px;
+}
+.mag-cols {
+  display: grid;
+  grid-template-columns: var(--il-measure) 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.mag-figure { margin-bottom: 20px; }
+.mag-caption {
+  font-family: var(--il-font-ui);
+  font-size: 12px;
+  color: var(--il-muted);
+  padding-top: 8px;
+  line-height: 1.4;
+}
+.mag-byline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--il-rule);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+/* The round author portrait the real signature leads with, as a shape and nothing more. */
+.mag-avatar {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--il-rule);
+}
+.mag-byline-text { font-family: var(--il-font-ui); font-size: 14px; color: var(--il-text); }
+.mag-byline-text strong { font-weight: 700; }
+.mag-byline-text span { display: block; font-size: 12px; color: var(--il-muted); margin-top: 4px; }
+.mag-body { font-size: 18px; line-height: 1.6; margin-bottom: 22px; }
+.mag-rail-title {
+  font-family: var(--il-font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--il-text);
+  border-bottom: 2px solid var(--il-text);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+.mag-rail-item { padding: 14px 0; border-bottom: 1px solid var(--il-rule); }
+.mag-rail-time {
+  font-family: var(--il-font-ui);
+  font-size: 12px;
+  color: var(--il-muted);
+  display: block;
+  margin-bottom: 5px;
+}
+.mag-rail-text {
+  font-family: var(--il-font-headline);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--il-text);
+}
+.mag-slot {
+  margin-top: 24px;
+  height: 250px;
+  background: var(--il-rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--il-font-ui);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--il-muted);
+}
+        </style>
+      </head>
+      <body>
+        <div class="il-exercise il-exercise--bold il-exercise--top">[EXERCISE, EXERCISE, EXERCISE]</div> 
+    <header>
+      <div class="mag-topbar">
+        <span class="mag-topbar-spacer"></span>
+        <span class="mag-topbar-mark"><div class="mag-wordmark">Capital</div></span>
+        <span class="mag-topbar-end"><span class="mag-subscribe">S'abonner</span></span>
+      </div>
+      <div class="mag-navbar">
+        <nav class="mag-nav">
+          <span>Fil d’infos</span><span>Économie et Société</span><span>Business</span><span>Votre argent</span><span>Immobilier</span><span>Vie au travail</span>
+        </nav>
+      </div>
+    </header>
+    <div class="mag-shell">
+      <div class="mag-head">
+        <div class="mag-crumbs">Accueil &rsaquo; Technology</div>
+        <h1 class="mag-headline">Northwind Logistics hit by ransomware, deliveries halted across the UK</h1>
+        <p class="mag-chapeau">The haulier says its depots are running on paper and that it has notified the regulator.</p>
+      </div>
+      <div class="mag-cols">
+        <article>
+          
+          <div class="mag-byline">
+            <span class="mag-avatar"></span>
+            <span class="mag-byline-text">
+              <strong>Par Helen Morrow</strong>
+              <span>Publié le 12 août 2026 à 10h14</span>
+            </span>
+          </div>
+          <p class="mag-body">Northwind Logistics has taken its depot systems offline after a ransomware attack.</p><p class="mag-body">The company said it had engaged external incident responders.</p>
+        </article>
+        <aside>
+          <div class="mag-rail-title">Technology</div>
+          
+              <div class="mag-rail-item">
+                <span class="mag-rail-time">14h02</span>
+                <span class="mag-rail-text">Épargne : ce que change le nouveau plafond du livret A</span>
+              </div>
+            
+              <div class="mag-rail-item">
+                <span class="mag-rail-time">13h35</span>
+                <span class="mag-rail-text">Ces trois valeurs industrielles qui résistent le mieux</span>
+              </div>
+            
+              <div class="mag-rail-item">
+                <span class="mag-rail-time">12h58</span>
+                <span class="mag-rail-text">Assurance cyber : les PME encore très peu couvertes</span>
+              </div>
+            
+              <div class="mag-rail-item">
+                <span class="mag-rail-time">11h40</span>
+                <span class="mag-rail-text">Retraite : le calendrier des revalorisations de septembre</span>
+              </div>
+            
+          <div class="mag-slot">Publicité</div>
+        </aside>
+      </div>
+    </div>
+   
+      </body>
+    </html> 

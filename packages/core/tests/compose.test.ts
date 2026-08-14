@@ -119,6 +119,19 @@ describe('buildDocument', () => {
     );
   });
 
+  /**
+   * The magazine family, through the composer for the same reason the freesheet is: the
+   * outlet exists. Holding the UK story fixed across all four snapshots is what makes them
+   * comparable, and this one is where the two bands at the top and the rail beside the story
+   * show up as markup rather than as an argument.
+   */
+  it('matches the golden snapshot for the French magazine layout', async () => {
+    const document = await buildDocument({ ...FIXED, outlet: 'capital' });
+    await expect(redactBlobs(document)).toMatchFileSnapshot(
+      './__snapshots__/fr-online-magazine.html',
+    );
+  });
+
   describe('self-containment', () => {
     it('makes no external reference of any kind', async () => {
       const document = await buildDocument(FIXED);

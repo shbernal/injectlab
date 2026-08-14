@@ -67,6 +67,27 @@ const DEMOS: Record<OutletId, NewsInject> = {
     ],
   },
   /**
+   * The same French incident a fourth time, in the afternoon and turned to face the reader.
+   * Les Echos above tells a shareholder what the outage costs; Capital asks a saver what to do
+   * about the line in their PEA, which is the register a business magazine writes in.
+   */
+  capital: {
+    kind: 'news',
+    outlet: 'capital',
+    section: 'Votre argent',
+    headline:
+      'Cyberattaque chez Aurélia Énergie : faut-il vendre si vous avez le titre dans votre PEA ?',
+    standfirst:
+      "L'action a perdu 4,2 % avant de se reprendre. Ce que dit l'historique des incidents comparables, et les deux dates à surveiller.",
+    byline: 'Nadia Lemoine',
+    publishedAt: '2026-08-12T15:45:00+02:00',
+    body: [
+      "Le titre Aurélia Énergie a ouvert mercredi en baisse de 4,2 % après l'annonce de l'arrêt de trois sites, avant de refluer à moins de 3 % en séance. Pour un porteur individuel, la question n'est pas le mouvement du jour mais ce qu'il reste dans six mois.",
+      "L'historique des cyberattaques industrielles comparables en Europe donne un ordre de grandeur : le décrochage initial se situe le plus souvent entre 3 et 8 %, et il est effacé en quelques semaines lorsque la production redémarre dans les délais annoncés. Il ne l'est pas quand le calendrier glisse une deuxième fois.",
+      "Deux dates méritent donc d'être notées : la reprise partielle visée en fin de semaine, et la publication des comptes semestriels le 24 septembre, où sera chiffré le coût de remédiation. Vendre dans l'intervalle revient à arbitrer sur une information que le marché a déjà intégrée.",
+    ],
+  },
+  /**
    * The same French incident as the daily above, an hour later and in the other register.
    * Rendered side by side that is the useful demonstration: one event, two publications, and
    * the difference between them is the outlet record rather than the copy.

@@ -27,6 +27,7 @@ function story(outlet: OutletId): NewsInject {
 const bbc = await buildDocument(story('bbc'));
 const lemonde = await buildDocument(story('lemonde'));
 const freesheet = await buildDocument(story('20minutes'));
+const magazine = await buildDocument(story('capital'));
 
 describe('two outlets, one story', () => {
   it('differ in masthead', () => {
@@ -75,6 +76,24 @@ describe('two outlets, one story', () => {
     expect(lemonde).not.toContain('fs-band');
   });
 
+  /**
+   * The magazine against both of them, because it is the family that was nearly not written.
+   * Its case rested on two things no theme value reaches: a section row drawn as a surface
+   * that the masthead is not part of, and no subscriber marker at all.
+   */
+  it('draws the magazine band without putting the masthead inside it', () => {
+    expect(magazine).toContain('mag-navbar');
+    expect(magazine).toContain('mag-topbar-mark');
+    // The freesheet's band is the masthead's own container. This family's is not.
+    expect(magazine).not.toContain('fs-band');
+    expect(magazine).not.toContain('fr-masthead');
+  });
+
+  it('leaves the subscriber marker to the outlets that have one', () => {
+    expect(lemonde).toContain('Article réservé aux abonnés');
+    expect(magazine).not.toContain('Article réservé aux abonnés');
+  });
+
   it('differ in document language', () => {
     expect(bbc).toContain('lang="en-GB"');
     expect(lemonde).toContain('lang="fr-FR"');
@@ -83,7 +102,7 @@ describe('two outlets, one story', () => {
   /** The framing is the one thing that must not vary by outlet, in wording or in style. */
   it('share the disclaimer band, character for character', () => {
     const band = /<div class="il-exercise (il-exercise--\w+ il-exercise--top)">([^<]*)<\/div>/u;
-    for (const document of [bbc, lemonde, freesheet]) {
+    for (const document of [bbc, lemonde, freesheet, magazine]) {
       expect(band.exec(document)?.[1]).toBe('il-exercise--bold il-exercise--top');
       expect(band.exec(document)?.[2]).toBe('[EXERCISE, EXERCISE, EXERCISE]');
     }
@@ -97,10 +116,12 @@ describe('the second outlet cost nothing in the first', () => {
    */
   it('has no outlet name anywhere in a layout', async () => {
     const layouts = await Promise.all(
-      ['uk-online-broadsheet', 'fr-online-daily', 'fr-online-freesheet'].map(async (family) => {
-        const { readFile } = await import('node:fs/promises');
-        return readFile(new URL(`../src/render/layouts/${family}.ts`, import.meta.url), 'utf8');
-      }),
+      ['uk-online-broadsheet', 'fr-online-daily', 'fr-online-freesheet', 'fr-online-magazine'].map(
+        async (family) => {
+          const { readFile } = await import('node:fs/promises');
+          return readFile(new URL(`../src/render/layouts/${family}.ts`, import.meta.url), 'utf8');
+        },
+      ),
     );
 
     for (const source of layouts) {

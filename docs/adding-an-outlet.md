@@ -5,9 +5,10 @@ wrong: either the theme is missing a field, or the outlet genuinely belongs to a
 family. Both are worth stopping to think about, and neither is fixed by special-casing one
 outlet inside a layout.
 
-Four outlets have been authored through this, and it has held. What it did not predict is
-that the third would need a new layout family, and the fourth two new theme fields. Both
-cases are in step 2, and telling them apart is the only hard judgement in this document.
+Five outlets have been authored through this, and it has held. What it did not predict is
+that the third would need a new layout family, the fourth two new theme fields, and the fifth
+a family again after a render proved it. All three cases are in step 2, and telling them apart
+is the only hard judgement in this document.
 
 ## Before you start: what may not go in the repository
 
@@ -17,6 +18,11 @@ may enter this repository, ever, in any form.
 - A theme names an **open-licensed face from the bundled catalogue**, chosen for visual
   proximity. See `packages/core/src/fonts/catalogue.ts` for what is bundled and what each
   face is there to stand in for.
+- Sometimes nothing in the catalogue is close. Capital sets its headlines in a condensed
+  grotesque and the catalogue has no condensed face, so it names the nearest thing and says
+  plainly in `fidelity` that the result runs wide and wraps a headline onto an extra line.
+  Say so rather than picking a face that flatters the record: a stand-in nobody documented is
+  the one that gets mistaken for a measurement later.
 - A masthead is either a **wordmark** set in a bundled face, or a **simplified redraw** as
   inline SVG. Not a copy of the official asset.
 - Every outlet states what it approximates in its `fidelity` note, and a test fails if that
@@ -132,6 +138,39 @@ and the family absorbed the second outlet instead of splitting.
 The tell is that the difference had a number. A furniture arrangement that no value could
 express is a family; a value the theme did not happen to carry yet is a field, however large
 it looks on the page.
+
+### When the argument will not settle it, render it
+
+Capital is the case where the reasoning above ran out. It sits between the two French
+families: a centred wordmark on white like the daily, a solid section bar and a rail beside
+the story like the freesheet, a headline wider than its column like both. Every argument for
+one family had an equally good argument for the other, and the numbers were no help because
+`hero` and `measure` already expressed them.
+
+What settled it was doing the cheap thing first. The record was authored against
+`fr-online-daily`, which is a file and one line, and rendered. Three things were wrong, and
+seeing them took a second where arguing about them had taken much longer:
+
+- The whole top of the page. The daily draws a quiet centred row of section names; Capital's
+  is a solid near-black band running edge to edge, and it is the second thing you see.
+- `Article réservé aux abonnés`, which `fr-online-daily` draws unconditionally because both
+  outlets in it are subscriber outlets. On a Capital page that is not a styling flaw, it is a
+  false statement about the outlet.
+- The story column centred under a left-ranged headline. Capital runs both flush to one edge
+  and fills the difference with the rail, so centring puts the body where Capital never puts
+  it.
+
+Then the same test against the other candidate, which is the step worth not skipping: the
+freesheet paints its masthead band with `--il-accent`, and Capital's accent is the yellow on
+its subscribe button. Rendering it there would have meant recording the wrong colour as the
+brand's to make the arrangement come out. A family that can only fit by falsifying a
+measurement is not a fit.
+
+So: argue it once, and if the argument does not settle, author it against the nearest existing
+family and look at the result. A family costs a file and four wiring lines, so trying the
+cheap answer first is nearly free, and a render is evidence in a way that a paragraph is not.
+Keep the failed attempt in the outlet's own comment rather than deleting it, so the next
+person can see the question was asked.
 
 ## 3. Fill in the record
 
