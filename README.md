@@ -13,7 +13,9 @@ an exercise disclaimer, ready to paste into an exercise email.
 That is real output, banner included. Northwind Logistics is fictional, as is every company
 named anywhere in this repository.
 
-**Status: early.** The news and X pipelines work end to end. Nothing is published to npm yet.
+**Status: early.** The news and X pipelines work end to end, across five outlets. `0.0.1` is the
+first release; see [`CHANGELOG.md`](CHANGELOG.md). Nothing is published to npm yet, so install
+from a clone.
 
 ## Install
 

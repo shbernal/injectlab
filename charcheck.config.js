@@ -39,7 +39,14 @@ export default {
       chars: DASHES,
       scope: 'markdown',
       message: REWORD,
-      include: ['README.md', 'AGENTS.md', 'docs/**/*.md', 'packages/*/README.md'],
+      include: [
+        'README.md',
+        'AGENTS.md',
+        'CHANGELOG.md',
+        'docs/**/*.md',
+        'demos/README.md',
+        'packages/*/README.md',
+      ],
     },
     {
       // Text that can reach a reader, which for this project includes every headline,

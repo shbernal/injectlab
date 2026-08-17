@@ -1,6 +1,6 @@
 {
   "name": "@injectlab/core",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Inject specs, outlet themes and the render pipeline behind injectlab",
   "keywords": [
     "crisis-exercise",
