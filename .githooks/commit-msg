@@ -1,4 +1,0 @@
-#!/bin/sh
-# charcheck, checking this repo's commit messages. Enable with:
-#   git config core.hooksPath .githooks
-exec pnpm exec charcheck --commit-msg "$1"

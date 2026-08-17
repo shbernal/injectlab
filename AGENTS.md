@@ -120,3 +120,9 @@ navigation heading and is quietly wrong. Read the screenshot it writes.
 
 Write the message to a file and pass it with `git commit -F`, never as an inline multi-line
 shell string. Describe the change on its own terms.
+
+No attribution trailer or footer. A message says what changed and why, not which tool wrote
+it, so no `Co-Authored-By:` naming an agent, no session identifier and no `Generated with`
+line. The `no-ai-attribution` job in `lefthook.yml` rejects the commit, and it comes from
+[`shbernal/lefthook-rules`](https://github.com/shbernal/lefthook-rules) rather than from here,
+so fix the message rather than the rule.

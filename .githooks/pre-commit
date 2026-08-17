@@ -1,4 +1,0 @@
-#!/bin/sh
-# charcheck, over the staged content only. Enable with:
-#   git config core.hooksPath .githooks
-exec pnpm exec charcheck --staged

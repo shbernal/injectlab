@@ -152,12 +152,12 @@ pnpm check
 Typecheck, lint, format, tests, build and charcheck, in that order. That single command is the
 gate. `INJECTLAB_E2E=1` adds the tests that launch a browser.
 
-To enable the repository's git hooks, which run charcheck over staged content and over the
-commit message:
-
-```bash
-git config core.hooksPath .githooks
-```
+Git hooks are managed by [lefthook](https://lefthook.dev) and installed by `pnpm install`,
+which runs `lefthook install` through the `prepare` script. Nothing else to enable. They run
+charcheck over staged content and over the commit message, and they reject a commit message
+that names the tool which wrote the change. Skip a run with `git commit --no-verify`, or set
+`LEFTHOOK=0` to turn them off for a session. They are a fast pre-filter; `pnpm check` is the
+gate.
 
 ## Layout
 

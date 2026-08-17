@@ -1,4 +1,4 @@
 packages:
   - 'packages/*'
-minimumReleaseAgeExclude:
-  - charcheck@0.2.3
+allowBuilds:
+  lefthook: true
