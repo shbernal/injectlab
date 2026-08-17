@@ -8,7 +8,7 @@ While the version stays below 1.0.0, a minor release may make a breaking change,
 against every entry that does. A patch release does not.
 
 The two packages in this repository, `@injectlab/core` and `@injectlab/cli`, share one version
-and one entry per release. Neither is published to npm yet.
+and one entry per release.
 
 ## [Unreleased]
 

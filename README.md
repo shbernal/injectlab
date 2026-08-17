@@ -14,20 +14,26 @@ That is real output, banner included. Northwind Logistics is fictional, as is ev
 named anywhere in this repository.
 
 **Status: early.** The news and X pipelines work end to end, across five outlets. `0.0.1` is the
-first release; see [`CHANGELOG.md`](CHANGELOG.md). Nothing is published to npm yet, so install
-from a clone.
+first release; see [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Install
 
 Node 24 or newer.
 
 ```bash
+pnpm add -g @injectlab/cli
+```
+
+`inject doctor` checks the Node version and the Chromium build, and prints what to type if
+something is missing.
+
+To work on injectlab itself, clone it and build from source:
+
+```bash
 pnpm install
 pnpm exec playwright install chromium
 pnpm build
 ```
-
-`inject doctor` checks both of those and prints what to type if something is missing.
 
 ## Sixty seconds
 

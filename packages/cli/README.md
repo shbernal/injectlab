@@ -11,8 +11,17 @@ paste into an exercise email.
 
 ## Install
 
-Not on npm yet, so install from a clone. Node 24 or newer, plus a Chromium build for the
-renderer:
+Node 24 or newer.
+
+```bash
+pnpm add -g @injectlab/cli
+```
+
+Rendering needs a Chromium build, which is not bundled. `inject doctor` checks the Node version
+and Chromium and prints the command to install what is missing, which is the most likely first
+run failure.
+
+To work on injectlab itself, clone it and build from source instead:
 
 ```bash
 git clone https://github.com/shbernal/injectlab
@@ -21,9 +30,6 @@ pnpm install
 pnpm exec playwright install chromium
 pnpm build
 ```
-
-`inject doctor` checks the Node version and the Chromium build, and prints what to type if
-something is missing. It is the most likely first run failure.
 
 ## Sixty seconds
 

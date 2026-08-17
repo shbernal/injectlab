@@ -13,19 +13,15 @@ This package is the library half. For the command line, use
 
 ## Install
 
-Not on npm yet, so install from a clone:
-
 ```bash
-git clone https://github.com/shbernal/injectlab
-cd injectlab
-pnpm install
-pnpm build
+pnpm add @injectlab/core
 ```
 
 Node 24 or newer. Rendering to PNG needs Chromium, which comes from `playwright`, an optional
 peer dependency:
 
 ```bash
+pnpm add playwright
 pnpm exec playwright install chromium
 ```
 
