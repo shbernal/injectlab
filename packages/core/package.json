@@ -48,9 +48,9 @@
     "build": "tsc -b"
   },
   "dependencies": {
-    "charcheck": "^0.2.5",
-    "valibot": "^1.4.2",
-    "yaml": "^2.9.0"
+    "charcheck": "^0.4.0",
+    "valibot": "^1.5.0",
+    "yaml": "^2.9.1"
   },
   "peerDependencies": {
     "playwright": "^1.62.0"
@@ -61,6 +61,6 @@
     }
   },
   "devDependencies": {
-    "playwright": "^1.62.1"
+    "playwright": "^1.65.0"
   }
 }
