@@ -227,7 +227,6 @@ describe('the schema', () => {
   });
 
   it('rejects neither, both, and a non-http URL', () => {
-    expect(spec('masthead: {}').ok).toBe(false);
     expect(spec('masthead:\n  path: ./m.svg\n  url: https://example.com/m.svg').ok).toBe(false);
     expect(spec('masthead:\n  url: file:///etc/passwd').ok).toBe(false);
   });

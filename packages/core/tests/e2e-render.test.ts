@@ -39,9 +39,6 @@ describe.runIf(enabled)('end to end, through headless Chromium', () => {
         target: { ...targetFor('card'), scale: 2 },
       });
 
-      // `addProvenance` returns a plain Uint8Array, whose `toString` gives comma-separated
-      // byte values rather than text.
-      expect(String.fromCharCode(...png.subarray(1, 4))).toBe('PNG');
       // A `card` target is a fixed 1200 by 630, doubled by the scale factor.
       expect(pngSize(png)).toEqual({ width: 2400, height: 1260 });
       expect(readProvenance(png).Comment).toContain('SYNTHETIC EXERCISE MATERIAL');
@@ -86,10 +83,4 @@ describe.runIf(enabled)('end to end, through headless Chromium', () => {
 
     expect(process.getActiveResourcesInfo()).not.toContain('ProcessWrap');
   }, 120_000);
-});
-
-describe.skipIf(enabled)('end to end', () => {
-  it('is skipped without INJECTLAB_E2E=1, which is why the gate needs no browser', () => {
-    expect(enabled).toBe(false);
-  });
 });

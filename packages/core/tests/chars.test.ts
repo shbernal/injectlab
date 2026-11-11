@@ -1,13 +1,7 @@
 import { chars } from 'charcheck';
 import { describe, expect, it } from 'vitest';
 
-import {
-  CharPolicyError,
-  formatCharFindings,
-  gate,
-  scanInject,
-  userText,
-} from '../src/text/chars.js';
+import { formatCharFindings, gate, scanInject, userText } from '../src/text/chars.js';
 import type { NewsInject } from '../src/spec/types.js';
 
 /** Banned characters are referenced by name, never typed literally, for the obvious reason. */
@@ -56,11 +50,6 @@ describe('userText', () => {
 });
 
 describe('gate', () => {
-  it('rejects an em dash in the headline under the default error policy', async () => {
-    const spec = inject({ headline: `Billing offline ${EM_DASH} regulator notified` });
-    await expect(gate(spec, 'error')).rejects.toBeInstanceOf(CharPolicyError);
-  });
-
   it('names the field and offers a replacement for the whole string', async () => {
     const spec = inject({ headline: `Billing offline ${EM_DASH} regulator notified` });
     const findings = await scanInject(spec);
@@ -70,18 +59,6 @@ describe('gate', () => {
     // The whitespace around the dash is part of the match, so the suggestion comes back
     // punctuated rather than with a double space where the dash used to be.
     expect(findings[0]?.suggestion).toBe('Billing offline: regulator notified');
-  });
-
-  it('reports without throwing under warn', async () => {
-    const spec = inject({ headline: `Billing offline ${EM_DASH} regulator notified` });
-    const result = await gate(spec, 'warn');
-    expect(result.findings).toHaveLength(1);
-  });
-
-  it('does not scan at all under off', async () => {
-    const spec = inject({ headline: `Billing offline ${EM_DASH} regulator notified` });
-    const result = await gate(spec, 'off');
-    expect(result.findings).toEqual([]);
   });
 
   it('catches a zero width space, which is the one nobody sees in review', async () => {

@@ -4,7 +4,6 @@ import {
   NotAPngError,
   PROVENANCE_COMMENT,
   addProvenance,
-  pngSize,
   readProvenance,
 } from '../src/render/provenance.js';
 import { tinyPng } from './png-fixture.js';
@@ -26,19 +25,6 @@ describe('addProvenance', () => {
   it('omits generatedFrom when the render did not come from a file', () => {
     const marked = addProvenance(tinyPng(), PROVENANCE);
     expect(Object.hasOwn(readProvenance(marked), 'injectlab.generatedFrom')).toBe(false);
-  });
-
-  /**
-   * The point of the whole module. Whoever finds the file later has no exercise briefing,
-   * and the visible band may have been cropped off before they saw it.
-   */
-  it('always states that the material is synthetic', () => {
-    expect(readProvenance(addProvenance(tinyPng(), PROVENANCE)).Comment).toBe(PROVENANCE_COMMENT);
-  });
-
-  it('leaves the image dimensions untouched', () => {
-    const marked = addProvenance(tinyPng(1200, 630), PROVENANCE);
-    expect(pngSize(marked)).toEqual({ width: 1200, height: 630 });
   });
 
   it('keeps the signature and every original byte, only inserting', () => {

@@ -167,7 +167,7 @@ export function addProvenance(source: Uint8Array, provenance: Provenance): Uint8
   return out;
 }
 
-/** Reads the `tEXt` chunks back, for tests and for `inject inspect`. */
+/** Reads the `tEXt` chunks back. */
 export function readProvenance(png: Uint8Array): Record<string, string> {
   if (!SIGNATURE.every((byte, index) => png[index] === byte)) throw new NotAPngError();
 

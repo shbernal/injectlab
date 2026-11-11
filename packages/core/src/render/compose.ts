@@ -29,8 +29,7 @@ import type { ArticleView, ViewContext } from './view.js';
  * Composing one self-contained HTML document.
  *
  * Self-contained is the whole requirement: inline style, `data:` URI fonts and images, no
- * external reference of any kind. Proven by rendering with every request routed to abort and
- * observing that the page issues none.
+ * external reference of any kind.
  *
  * Deterministic too. The same inject at the same version produces the same string, byte for
  * byte. Nothing here reads a clock, a locale default or an environment variable.
