@@ -82,14 +82,6 @@ export async function writeOutput(
     kind: inject.kind,
     source: sourceOf(inject),
     bytes,
-    ...(typeof data === 'string' ? undefined : trySize(data)),
+    ...(typeof data === 'string' ? undefined : pngSize(data)),
   };
-}
-
-function trySize(png: Uint8Array): { width: number; height: number } | undefined {
-  try {
-    return pngSize(png);
-  } catch {
-    return undefined;
-  }
 }

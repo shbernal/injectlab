@@ -14,9 +14,10 @@ have been called.
 
 ## Composition produces one self-contained document
 
-Inline styles, fonts and images as `data:` URIs, no external reference of any kind. Not "no
-external reference we know of": rendering with every request routed to `abort()` shows the
-page issues **zero** requests.
+Inline styles, fonts and images as `data:` URIs, no external reference of any kind. The
+render spike checked this once by routing every request to `abort()` and seeing the page issue
+none. What guards it now is the self-containment test in `compose.test.ts` and the import-graph
+test in `masthead.test.ts` that keeps the one fetching module off the compose path.
 
 That is what makes a render reproducible. There is no font cache to be warm or cold, no
 filesystem layout to get wrong, and no site that might have redesigned since yesterday.

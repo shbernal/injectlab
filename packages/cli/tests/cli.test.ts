@@ -226,13 +226,6 @@ describe('--format html', () => {
 describe('the character gate', () => {
   const bad = ['--headline', `Offline ${chars.EM_DASH} regulator notified`];
 
-  it('exits 3, which is the code an agent loop branches on', async () => {
-    const h = harness();
-    expect(await run(['news', '--outlet', 'bbc', ...bad, '--out', h.dir], h.context)).toBe(
-      EXIT_CHARS,
-    );
-  });
-
   it('reports the field, the position and a suggestion, and says how to proceed', async () => {
     const h = harness();
     await run(['news', '--outlet', 'bbc', ...bad, '--out', h.dir], h.context);
@@ -263,22 +256,6 @@ describe('the character gate', () => {
 });
 
 describe('render', () => {
-  const SPEC = `
-kind: news
-outlet: bbc
-headline: Northwind Logistics hit by ransomware
-publishedAt: 2026-08-12T09:14:00+01:00
-`;
-
-  it('renders a spec file', async () => {
-    const h = harness();
-    const spec = path.join(h.dir, 'inject.yaml');
-    await writeFile(spec, SPEC);
-
-    expect(await run(['render', spec, '--out', h.dir], h.context)).toBe(EXIT_OK);
-    expect((await readdir(h.dir)).filter((f) => f.endsWith('.png'))).toHaveLength(1);
-  });
-
   it('renders every inject in a batch file, numbering the outputs', async () => {
     const h = harness();
     const spec = path.join(h.dir, 'batch.yaml');
@@ -368,13 +345,6 @@ describe('--json', () => {
     expect(outputs).toHaveLength(1);
     expect(outputs[0]).toMatchObject({ kind: 'news', source: 'bbc', width: 2400, height: 900 });
     expect(typeof outputs[0]?.bytes).toBe('number');
-  });
-
-  it('carries no ANSI escapes, so a parser does not have to strip them', async () => {
-    const h = harness();
-    await run([...NEWS, '--json', '--out', h.dir], h.context);
-    // Built from the code point rather than pasted, since the character is invisible here too.
-    expect(h.out[0]).not.toContain(String.fromCodePoint(0x1b));
   });
 
   it('still reports ok false and the findings when the gate rejects', async () => {

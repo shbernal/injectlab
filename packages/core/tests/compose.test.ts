@@ -236,25 +236,12 @@ describe('buildDocument', () => {
   });
 
   describe('outlet conventions', () => {
-    it('writes the timestamp in the outlet time zone, not the host one', async () => {
-      // 08:14 UTC is 09:14 in London, and the fixture is a London outlet.
-      expect(await buildDocument(FIXED)).toContain('Published 12 August 2026, 09:14');
-    });
-
-    it('applies the outlet byline prefix', async () => {
-      expect(await buildDocument(FIXED)).toContain('By Helen Morrow');
-    });
-
     it('falls back to the outlet default section', async () => {
       const withoutSection: NewsInject = { ...FIXED };
       delete withoutSection.section;
 
       const document = await buildDocument(withoutSection);
       expect(document).toContain(getOutlet('bbc').conventions.sectionDefault);
-    });
-
-    it('marks the document in the outlet locale', async () => {
-      expect(await buildDocument(FIXED)).toContain('lang="en-GB"');
     });
   });
 

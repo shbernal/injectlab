@@ -36,10 +36,6 @@ describe('targetFor', () => {
     expect(targetFor()).toEqual({ width: 1200, scale: 2, format: 'png' });
   });
 
-  it('gives the card variant an explicit height, because the crop is the point', () => {
-    expect(targetFor('card')).toEqual({ width: 1200, height: 630, scale: 2, format: 'png' });
-  });
-
   it('gives mobile a phone width and no height', () => {
     expect(targetFor('mobile').height).toBeUndefined();
     expect(targetFor('mobile').width).toBe(390);

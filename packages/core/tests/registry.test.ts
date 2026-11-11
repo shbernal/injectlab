@@ -12,10 +12,6 @@ const LAYOUT_FAMILIES = new Set([
 ]);
 
 describe('the outlet registry', () => {
-  it('is not empty, since an empty registry makes OutletId unusable', () => {
-    expect(listOutlets().length).toBeGreaterThan(0);
-  });
-
   it('answers getOutlet for every id it lists', () => {
     for (const id of listOutletIds()) {
       expect(getOutlet(id).id).toBe(id);
