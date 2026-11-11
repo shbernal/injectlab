@@ -34,3 +34,14 @@ jobs:
       # need a Chromium download, and whether CI pays that cost is a decision for the
       # renderer, not for the scaffold.
       - run: pnpm run check
+
+  commit-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: commit-check/commit-check-action@v2
+        with:
+          message: true
+          branch: false

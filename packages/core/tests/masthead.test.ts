@@ -173,9 +173,9 @@ describe('composing never fetches', () => {
   });
 });
 
-describe('prefetching', () => {
-  const remote = (url: string): NewsInject => ({ ...BASE, masthead: { url } });
+const remote = (url: string): NewsInject => ({ ...BASE, masthead: { url } });
 
+describe('prefetching', () => {
   it('collects each URL once however many injects name it', () => {
     const urls = remoteUrlsIn([
       remote('https://example.com/a.svg'),
