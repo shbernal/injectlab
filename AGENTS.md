@@ -4,10 +4,11 @@ Read `README.md` first for what the project is. This is what you need before cha
 
 ## Pre-release
 
-No GitHub release exists yet. Treat the project as free to change: do not preserve backwards
-compatibility unless asked, and do not defer to the prior architecture when it conflicts with
-the current goal. Existing code and docs are context, not constraints. Once there is a
-release, compatibility becomes a real constraint.
+The packages are published, but the version is below 1.0.0, so there is no compatibility
+promise. Treat the project as free to change: do not preserve backwards compatibility unless
+asked, and do not defer to the prior architecture when it conflicts with the current goal.
+Existing code and docs are context, not constraints. A breaking change goes in a minor release
+and says so in CHANGELOG.md.
 
 ## Commands
 
