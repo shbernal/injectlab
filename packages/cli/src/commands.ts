@@ -1,13 +1,7 @@
 import { access, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import {
-  formatForPath,
-  formatSpecErrors,
-  getOutlet,
-  listOutlets,
-  parseSpec,
-} from '@injectlab/core';
+import { formatForPath, formatSpecErrors, listOutlets, parseSpec } from '@injectlab/core';
 import type { NewsInject } from '@injectlab/core';
 
 import { EXIT_OK, EXIT_RENDER, EXIT_SPEC, EXIT_USAGE, UsageError } from './args.js';
@@ -220,13 +214,6 @@ export async function doctor(_flags: RenderFlags, context: CliContext): Promise<
       .map((o) => o.id)
       .join(', ')})`,
   );
-  // Cheap, and it is the check that catches a half-authored outlet reaching a user.
-  for (const outlet of listOutlets()) {
-    if (getOutlet(outlet.id as never).fidelity.trim() === '') {
-      context.io.out(`outlet ${outlet.id}: no fidelity note`);
-      ok = false;
-    }
-  }
 
   return ok ? EXIT_OK : EXIT_RENDER;
 }

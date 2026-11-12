@@ -71,10 +71,15 @@ async function packageVersion(): Promise<string> {
     const manifest: unknown = JSON.parse(
       await readFile(new URL('../../package.json', import.meta.url), 'utf8'),
     );
-    cachedVersion =
-      typeof manifest === 'object' && manifest !== null && 'version' in manifest
-        ? String(manifest.version)
-        : '0.0.0';
+    if (
+      typeof manifest !== 'object' ||
+      manifest === null ||
+      !('version' in manifest) ||
+      typeof manifest.version !== 'string'
+    ) {
+      throw new Error('@injectlab/core: package.json has no version');
+    }
+    cachedVersion = manifest.version;
   }
   return cachedVersion;
 }

@@ -81,9 +81,15 @@ async function version(): Promise<string> {
   const manifest: unknown = JSON.parse(
     await readFile(new URL('../package.json', import.meta.url), 'utf8'),
   );
-  return typeof manifest === 'object' && manifest !== null && 'version' in manifest
-    ? String(manifest.version)
-    : '0.0.0';
+  if (
+    typeof manifest !== 'object' ||
+    manifest === null ||
+    !('version' in manifest) ||
+    typeof manifest.version !== 'string'
+  ) {
+    throw new Error('@injectlab/cli: package.json has no version');
+  }
+  return manifest.version;
 }
 
 /** Convenience for embedders: the default context wired to real stdio. */
