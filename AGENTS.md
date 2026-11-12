@@ -123,6 +123,5 @@ shell string. Describe the change on its own terms.
 
 No attribution trailer or footer. A message says what changed and why, not which tool wrote
 it, so no `Co-Authored-By:` naming an agent, no session identifier and no `Generated with`
-line. The `no-ai-attribution` job in `lefthook.yml` rejects the commit, and it comes from
-[`shbernal/lefthook-rules`](https://github.com/shbernal/lefthook-rules) rather than from here,
-so fix the message rather than the rule.
+line. The `commit-check` job in CI rejects such a message (rules in `.github/cchk.toml`), and
+the `check` job runs charcheck over every commit message in the pull request.

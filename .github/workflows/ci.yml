@@ -18,6 +18,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The commit-message step below reads every commit of the pull request.
+          fetch-depth: 0
 
       - name: Enable Corepack
         run: corepack enable
@@ -34,6 +37,20 @@ jobs:
       # need a Chromium download, and whether CI pays that cost is a decision for the
       # renderer, not for the scaffold.
       - run: pnpm run check
+
+      # Commit messages are prose a reader sees, held to the same character rule as the README.
+      - name: charcheck over the pull request's commit messages
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          status=0
+          for sha in $(git rev-list "$BASE..$HEAD"); do
+            git log -1 --format=%B "$sha" > "$RUNNER_TEMP/commit-msg"
+            pnpm exec charcheck --commit-msg "$RUNNER_TEMP/commit-msg" || { echo "in $sha"; status=1; }
+          done
+          exit "$status"
 
   commit-check:
     runs-on: ubuntu-latest

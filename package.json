@@ -27,13 +27,11 @@
     "format:fix": "oxfmt",
     "test": "vitest run",
     "lint:chars": "charcheck",
-    "prepare": "lefthook install",
     "check": "pnpm run typecheck && pnpm run lint && pnpm run format && pnpm run test && pnpm run build && pnpm run lint:chars"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "charcheck": "^0.4.0",
-    "lefthook": "^2.2.2",
     "micromark": "^4.0.3",
     "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
