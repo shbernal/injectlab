@@ -125,3 +125,13 @@ No attribution trailer or footer. A message says what changed and why, not which
 it, so no `Co-Authored-By:` naming an agent, no session identifier and no `Generated with`
 line. The `commit-check` job in CI rejects such a message (rules in `.github/cchk.toml`), and
 the `check` job runs charcheck over every commit message in the pull request.
+
+## Releasing
+
+Both packages and the root manifest share one version. In a PR, bump all three
+`package.json` files and move the `[Unreleased]` entries in `CHANGELOG.md` under the new
+version. Once it is merged, push a `v<version>` tag on `main`.
+`.github/workflows/publish.yml` refuses a tag that disagrees with any manifest, runs
+`pnpm check`, then `pnpm -r publish`: core first, then the CLI, with `workspace:*` rewritten
+to the concrete version. There is no token: npm trusts that workflow file for both packages
+(trusted publishing), so renaming it breaks publishing. Do not publish by hand.
