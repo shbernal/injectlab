@@ -12,6 +12,16 @@ and one entry per release.
 
 ## [Unreleased]
 
+## [0.0.2]
+
+### Changed
+
+- Rendering and `inject --version` throw when the package manifest has no version, instead of
+  stamping `0.0.0` into the provenance.
+- `inject doctor` no longer re-checks at runtime that every outlet has a fidelity note. The
+  build-time registry test already guarantees it.
+- Dependencies: `charcheck` 0.4, `valibot` 1.5, `yaml` 2.9.1.
+
 ## [0.0.1]
 
 First public release. What follows is the shape of the thing rather than a list of changes,
